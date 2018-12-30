@@ -1,3 +1,8 @@
+//to hide instructions
+document.addEventListener('keypress', (event) => {
+    document.getElementById('instructions').style.display = "none";
+  })
+
 var amplitudeA;
 var amplitudeB;
 var amplitudeD;
@@ -49,7 +54,7 @@ var rad; // an initial radius value for the central sine
 var j = 0
 var i = 0
 var n = 0
-var seed = 1234;
+var seed  = 1234;
 
 //o
 var amppX = 50
@@ -81,8 +86,6 @@ var springs = []
 
 //q
 var springQ = []
-
-
 
 
 function preload() {
@@ -203,6 +206,9 @@ function setup() {
 function draw() {
     randomSeed(seed);
     background(rouge, vert, bleu, 40)
+    
+    //to display instructions if no sounds have been played since 3sec
+    afficherInstructions()
 
     musicPlay(soundA, 65) //a
     musicPlay(soundB, 66) //b
@@ -293,7 +299,7 @@ function draw() {
 
     if (soundJ.currentTime() < soundJ.duration() - 0.1 && soundJ.currentTime() > 0) {
         animJ()
-    }
+    } else 
 
     if (soundK.currentTime() < soundK.duration() - 0.1 && soundK.currentTime() > 0) {
         animK()
@@ -350,6 +356,10 @@ function draw() {
     }
 } //loop
 
+
+function afficherInstructions(){
+
+}
 
 
 function musicPlay(sound, keyID) {
@@ -608,6 +618,7 @@ function animI() { //i
 }
 
 function animJ() { //j
+
     //jet de cocobilles
     var t = map(soundJ.currentTime(), 0, soundJ.duration() * 0.60, 0, 1)
     t = constrain(t, 0, 1)
@@ -927,7 +938,7 @@ function animZ() {
     var displayy = map(levelZ, 0, 0.072, 0, 100)
     pg.clear()
 
-    if (displayy > 25) { //conditon d'affichage : si amplitude sonore > 85 %
+    if (displayy > 85) { //conditon d'affichage : si amplitude sonore > 85 %
         biscottes.push(new biscotte())
     }
     // console.log(biscottes.length)
