@@ -3,6 +3,9 @@ document.addEventListener('keypress', (event) => {
     document.getElementById('instructions').style.display = "none";
   })
 
+var amplitudeMaster
+var levelMaster 
+
 var amplitudeA;
 var amplitudeB;
 var amplitudeD;
@@ -124,6 +127,7 @@ function setup() {
 
 
     //tous les analysers de son
+    amplitudeMaster = new p5.Amplitude()
     amplitudeA = new p5.Amplitude()
     amplitudeA.setInput(soundA)
     amplitudeB = new p5.Amplitude()
@@ -159,6 +163,8 @@ function setup() {
     soundQFFT.setInput(soundQ)
     soundHFFT = new p5.FFT(0.8, 16)
     soundHFFT.setInput(soundH)
+
+    levelMaster = amplitudeMaster.getLevel()
 
     //for color palette, helped by a sketch of @GotoLoop, sketch online at https://forum.processing.org/two/discussion/17621/array-of-colors#Item_1
     palette[0] = color(154, 202, 62)
@@ -198,7 +204,7 @@ function setup() {
     NUMSINES = 20; // how many of these things can we do at once?
     fund = 0.005; // the speed of the central sine    
     rad = height / 4; // compute radius for central circle
-    for (var i = 0; i < sines.length; i++) {
+    for (let i = 0; i < sines.length; i++) {
         sines[i] = PI; // start EVERYBODY facing NORTH
     }
 }
@@ -208,7 +214,7 @@ function draw() {
     background(rouge, vert, bleu, 40)
     
     //to display instructions if no sounds have been played since 3sec
-    afficherInstructions()
+    //afficherInstructions()
 
     musicPlay(soundA, 65) //a
     musicPlay(soundB, 66) //b
@@ -356,16 +362,19 @@ function draw() {
     }
 } //loop
 
-
+/*
 function afficherInstructions(){
+    var timer=millis()
 
+    if((timer > 3000) && (levelMaster == 0)){} console.log("on est là !")//document.getElementById('instructions').style.display = "block";
 }
 
-
+*/
 function musicPlay(sound, keyID) {
 
     if (keyIsDown(keyID) == true) {
         seed = random(9999)
+      //  afficherInstructions()
         if (sound.isPlaying() == true) {
             sound.stop()
             sound.play()
@@ -451,7 +460,7 @@ function animB() {
 
     push()
     translate(width / 2, height / 2)
-    for (i = 0; i < currentTotem; i++) {
+    for (let i = 0; i < currentTotem; i++) {
 
         posXdroite = (height / 4 * -cos(i * PI / 6 + PI / 2))
         posYdroite = (height / 4 * -sin(i * PI / 6 + PI / 2))
@@ -488,7 +497,7 @@ function animC() {
     //add new spring for each excess of the energy of the range of freq
     if (middle > 105) springs.push(new Spring(timeline, middle, middleSpring))
 
-    for (var i = 0; i < springs.length; i++) {
+    for (let i = 0; i < springs.length; i++) {
         springs[i].update();
         springs[i].display();
     }
@@ -560,7 +569,7 @@ function animF() {
     strokeWeight(2)
     stroke(random(palette))
     translate(0, height / 2)
-    for (i = 1; i < currentPoint + 1; i++) {
+    for (let i = 1; i < currentPoint + 1; i++) {
 
         ellipse(i * width / 14, 0, radius, radius)
         ellipse(i * width / 14, 0, radius + 15, radius + 15)
@@ -633,7 +642,7 @@ function animJ() { //j
     translate(random((width / 2) - 50, (width / 2) + 50), random((height / 2) + 50, (height / 2) - 50))
     //angle de lancé alétoire
     rotate(random(TWO_PI))
-    for (i = 0; i < 15; i++) {
+    for (let i = 0; i < 15; i++) {
         xtarget = random(100, 500)
         ytarget = random(-100, 100)
         var x = lerp(0, xtarget, t)
@@ -679,7 +688,7 @@ function animM() {
 
     translate(width / 2, height / 2)
     beginShape();
-    for (i = 0; i < TWO_PI; i += mod) {
+    for (let i = 0; i < TWO_PI; i += mod) {
         let xpos = radius * cos(i);
         let ypos = radius * sin(i);
         vertex(xpos, ypos);
@@ -693,7 +702,7 @@ function animN() {
     // randomSeed(455)
     push()
     translate(width / 2, height / 2)
-    for (var i = 0; i <= 6000; i++) {
+    for (let i = 0; i <= 6000; i++) {
         // var angle = i * 24.0 * PI / 10000;
         var angle = map(soundN.currentTime(), 0, soundN.duration(), 2, TWO_PI * 2) * i / 4000
         var x = cos(angle) * ((cos(angle)) - 10 * cos(4 * angle) - pow(sin(angle / 4), 15)) * 40
@@ -740,22 +749,18 @@ function animP() {
 
 function animQ() {
     push()
-    var timeline = map(soundQ.currentTime(), 0, soundQ.duration(), 0, 1)
-    timeline = constrain(0, 1)
-
     springQ.push(new Spring(100, width - 200))
 
-    springQ[i].update();
-    springQ[i].displayQ();
+    springQ[0].update();
+    springQ[0].displayQ();
     pop()
 }
 
 function animR() {
     //rectangles qui tournent sur eux mêmeS
     push()
-
     rectMode(CENTER)
-    for (var i = 0; i < 25; i++) {
+    for (let i = 0; i < 25; i++) {
         push()
         noFill()
         strokeWeight(2)
@@ -764,7 +769,6 @@ function animR() {
         rotate(frameCount / 10 + i)
         rect(0, 0, 200, 50, 10)
         pop()
-
     }
     pop()
 }
@@ -828,7 +832,7 @@ function animU() { //u
     strokeWeight(1)
     noFill()
 
-    for (var i = 0; i <= nombrePoints && apparition > i; i++) {
+    for (let i = 0; i <= nombrePoints && apparition > i; i++) {
         push()
         let angle = map(i, 0, nombrePoints, 0, TWO_PI);
         // play w/ value of the Lissajous curve
@@ -935,7 +939,7 @@ function animY() {
 function animZ() {
     var levelZ = amplitudeZ.getLevel()
     //console.log(levelZ)
-    var displayy = map(levelZ, 0, 0.072, 0, 100)
+    var displayy = map(levelZ, 0, 0.07528338223373322, 0, 100)
     pg.clear()
 
     if (displayy > 85) { //conditon d'affichage : si amplitude sonore > 85 %
@@ -946,6 +950,7 @@ function animZ() {
 
         biscottes[i].update(); // update biscotte transparency
         biscottes[i].display(pg); // draw new biscotte
+        //erase biscotte if it's too much transparent
         if (biscottes[i].transparence < 5) {
             biscottes = biscottes.splice(i)
         }
