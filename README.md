@@ -14,9 +14,12 @@ The sounds were recorded by me, using my Orville by Gibson guitar, a Marshall am
 - a riff inspired by the melody of « The thrill is gone » of B.B.King (bbking_loop_jazzt.wav),    version jazzy of it
 
 For some animations I got inspired from the examples of the book « Design Generatif » written by Harmut Bohnacker, Benedikt Grob, Julia Laub and Claudius Lazzeroni, published by Pyramid.
-I also saw the idea of  using a palette of color instead of define fixed color for each animation on the  Processing forum, proposed by GoToLoop ; sketch avaible at https://forum.processing.org/two/discussion/17621/array-of-colors#Item_1.
+
+I also saw the idea of  using a palette of color instead of define fixed color for each animation on the  Processing forum, proposed by GoToLoop ;  sketch avaible at https://forum.processing.org/two/discussion/17621/array-of-colors#Item_1.
+
 Some are directly inspired by one among the animations of the original Patatap, like animJ, animK.
 AnimN use the equation of T.Fay's butterfly.
+
 The spring class reuse a part of the class of @Chloe, sketch available at https://discourse.processing.org/t/change-processing-code-to-p5-js/1709
 
 And I used a lot french recourses relating to p5.js library shared by Berenger Recoules, see https://github.com/b2renger.
