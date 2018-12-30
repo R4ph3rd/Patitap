@@ -6,12 +6,14 @@ concept by jonobr1 & lullatone see https://www.patatap.com/
 
 Sound ambiance of a record session, w/ some licks and sounds mostly jazz & blues, this project try to give a visual representation to each of them, and transmit the agitation of this moments. Almost cacophonous, but suffused with the energy of the musicians, the ambient disorder of this project represents this sessions of sound creation in full boiling.
 
+
 The sounds were recorded by me, using my Orville by Gibson guitar, a Marshall amp, wah-wah pedal, Jamman loop pedal, a pick, a spoon, some blast of air, a sofa and  a screwdriver. Some riff / phrase are from existing songs :
 - a phrase from the solo of « The wind cries Mary » of Jimi Hendrix (watchtower_lick,wav)
 - the riff of « Pray and Joy » of Stevie Ray Vaughan & Albert King (stevieRAY.wav)
 - the riff of « Mannish Boy » of Muddy Watters (mannishboy_riff.wav)
 - a phrase from « Blues Deluxe » of Joe Bonamassa (j.bonamassa.wav)
 - a riff inspired by the melody of « The thrill is gone » of B.B.King (bbking_loop_jazzt.wav),    version jazzy of it
+
 
 For some animations I got inspired from the examples of the book « Design Generatif » written by Harmut Bohnacker, Benedikt Grob, Julia Laub and Claudius Lazzeroni, published by Pyramid.
 
