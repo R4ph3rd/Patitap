@@ -3,6 +3,8 @@ document.addEventListener('keypress', (event) => {
     document.getElementById('instructions').style.display = "none";
   })
 
+//issues : animZ breaked, randomSeed reset for all each new play of sound
+
 var amplitudeMaster
 var levelMaster 
 
@@ -54,9 +56,6 @@ var fund
 var sines = new Array(NUMSINES); // an array to hold all the current angles
 var rad; // an initial radius value for the central sine
 
-var j = 0
-var i = 0
-var n = 0
 var seed  = 1234;
 
 //o
@@ -90,6 +89,7 @@ var springs = []
 //q
 var springQ = []
 
+var loop 
 
 function preload() {
     soundA = loadSound("assets/mannishboy_riff.wav")
@@ -124,6 +124,7 @@ function setup() {
     canvas = createCanvas(windowWidth, windowHeight);
     background(0, 40);
     pixelDensity(1)
+    loop = 0
 
 
     //tous les analysers de son
@@ -249,8 +250,23 @@ function draw() {
     if (soundL.currentTime() < soundL.duration() - 0.1 && soundL.currentTime() > 0) {
         animL()
     }
+    //is loop activated ?
+    if (loop){
+        soundA.setLoop(true)
+        soundZ.setLoop(true)
+        soundE.setLoop(true)
+        soundR.setLoop(true)
+    } else {
+        soundA.setLoop(false)
+        soundZ.setLoop(false)
+        soundE.setLoop(false)
+        soundR.setLoop(false)
+    }
 
 
+    if (soundE.currentTime() < soundE.duration() - 0.1 && soundE.currentTime() > 0) {
+        animE()
+    }
     if (soundA.currentTime() < soundA.duration() - 0.1 && soundA.currentTime() > 0) {
         animA()
     }
@@ -262,9 +278,6 @@ function draw() {
         animR()
     }
 
-    if (soundE.currentTime() < soundE.duration() - 0.1 && soundE.currentTime() > 0) {
-        animE()
-    }
 
 
     //then short animations
@@ -303,13 +316,17 @@ function draw() {
         bleu = 0
     }
 
-    if (soundJ.currentTime() < soundJ.duration() - 0.1 && soundJ.currentTime() > 0) {
-        animJ()
-    } else 
-
+    if (soundT.currentTime() < soundT.duration() - 0.1 && soundT.currentTime() > 0) {
+        animT()
+    }
+    
     if (soundK.currentTime() < soundK.duration() - 0.1 && soundK.currentTime() > 0) {
         animK()
     }
+
+    if (soundJ.currentTime() < soundJ.duration() - 0.1 && soundJ.currentTime() > 0) {
+        animJ()
+    } 
 
     if (soundM.currentTime() < soundM.duration() - 0.1 && soundM.currentTime() > 0) {
         animM()
@@ -337,9 +354,7 @@ function draw() {
         animS()
     }
 
-    if (soundT.currentTime() < soundT.duration() - 0.1 && soundT.currentTime() > 0) {
-        animT()
-    }
+   
 
     if (soundU.currentTime() < soundU.duration() - 0.1 && soundU.currentTime() > 0) {
         animU()
@@ -360,6 +375,9 @@ function draw() {
     if (soundY.currentTime() < soundY.duration() - 0.1 && soundY.currentTime() > 0) {
         animY()
     }
+
+  
+      
 } //loop
 
 /*
@@ -370,6 +388,20 @@ function afficherInstructions(){
 }
 
 */
+
+function keyPressed(){
+ // activzate / desactivate loop condition for 4 backings tracks
+ if(keyCode === ENTER){
+    if(loop){
+        console.log("loop désactivée")
+        loop = 0
+    } else {
+        console.log("loop activée")
+        loop = 1
+    }
+  }
+}
+
 function musicPlay(sound, keyID) {
 
     if (keyIsDown(keyID) == true) {
@@ -491,7 +523,7 @@ function animC() {
     push()
     soundCFFT.analyze()
     let middle = soundCFFT.getEnergy("mid")
-    console.log(middle)
+   // console.log(middle)
     let middleSpring = map(middle, 105, 249, -(height / 4), height / 4)
     let timeline = map(soundC.currentTime(), 0, soundC.duration() * 0.65, 50, width - 50)
     //add new spring for each excess of the energy of the range of freq
@@ -627,13 +659,13 @@ function animI() { //i
 }
 
 function animJ() { //j
-
+    
     //jet de cocobilles
-    var t = map(soundJ.currentTime(), 0, soundJ.duration() * 0.60, 0, 1)
+    let t = map(soundJ.currentTime(), 0, soundJ.duration() * 0.60, 0, 1)
     t = constrain(t, 0, 1)
 
-    var xtarget = []
-    var ytarget = []
+    let xtarget = []
+    let ytarget = []
 
     push()
     noStroke()
@@ -645,23 +677,22 @@ function animJ() { //j
     for (let i = 0; i < 15; i++) {
         xtarget = random(100, 500)
         ytarget = random(-100, 100)
-        var x = lerp(0, xtarget, t)
-        var y = lerp(0, ytarget, t)
+        let x = lerp(0, xtarget, t)
+        let y = lerp(0, ytarget, t)
         ellipse(x, y, 20, 20)
     }
     pop()
-
-
 }
 
 //la course des pôles d'une ligne !
 function animK() {
     push()
-    let t = map(soundK.currentTime(), 0, soundK.duration() * 0.75, 0, 1) * 1.4
-    t = constrain(t, 0, 1)
-    let before = lerp(width / 6, 5 * width / 6, t)
+    let time = map(soundK.currentTime(), 0, soundK.duration() * 0.75, 0, 1) * 1.4
+    time = constrain(time, 0, 1)
+    let before = lerp(width / 6, 5 * width / 6, time)
     let after = map(soundK.currentTime(), 0, soundK.duration(), width / 8, 5 * (width / 6)) // départ plus proche du bord pour éviter l'impression de décentrage
-    stroke(12, 171, 181)
+    console.log("after : " + after)
+    stroke(random(palette))
     strokeWeight(height / 8)
     strokeCap(SQUARE)
     noFill()
@@ -791,7 +822,7 @@ function animS() {
     stroke(176, 17, 65)
     push()
     translate(width / 4 + x, height + y)
-    rotate(frameCount / 10 + i)
+    rotate(frameCount / 10 )
     rect(0, 0, 50, 50)
     pop()
     pop()
@@ -942,17 +973,17 @@ function animZ() {
     var displayy = map(levelZ, 0, 0.07528338223373322, 0, 100)
     pg.clear()
 
-    if (displayy > 85) { //conditon d'affichage : si amplitude sonore > 85 %
+    if (displayy > 55) { //conditon d'affichage : si amplitude sonore > 85 %
         biscottes.push(new biscotte())
     }
-    // console.log(biscottes.length)
-    for (let i = 0; i < biscottes.length; i++) {
-
-        biscottes[i].update(); // update biscotte transparency
-        biscottes[i].display(pg); // draw new biscotte
+     console.log("length=  " +biscottes.length)
+    for ( plop = 0; plop < biscottes.length; plop++) {
+        console.log("boucle for " + plop)
+        biscottes[plop].update(); // update biscotte transparency
+        biscottes[plop].display(pg); // draw new biscotte
         //erase biscotte if it's too much transparent
-        if (biscottes[i].transparence < 5) {
-            biscottes = biscottes.splice(i)
+        if (biscottes[plop].transparence < 5) {
+            biscottes = biscottes.splice(plop)
         }
     }
     image(pg, 0, 0, width, height)
