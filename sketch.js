@@ -3,59 +3,21 @@ document.addEventListener('keypress', (event) => {
     document.getElementById('instructions').style.display = "none";
   })
 
-//issues : randomSeed reset for all each new play of sound
+//issues : randomSeed reset for all each new play of sound, so colors or orientations can change
 
 var amplitudeMaster
 var levelMaster 
+var seed  = 1234;
+var loop 
 
-var amplitudeA;
-var amplitudeB;
-var amplitudeD;
-var amplitudeK
-var amplitudeF
-var amplitudeE
-var amplitudeG
-var amplitudeT
-var amplitudeV
+var amplitudeA, amplitudeB, amplitudeD, amplitudeK, amplitudeF, amplitudeE, amplitudeG, amplitudeT, amplitudeV
+var soundAFFT, soundSFFT, soundCFFT, soundTFFT, soundQFFT, soundHFFT
 
-var soundAFFT
-var soundSFFT
-var soundCFFT
-var soundTFFT
-var soundQFFT
-var soundHFFT
-
-var levelA
-var levelB
-
-//b
 var biscottes = []
-var pg
-
-//h
 var cordes = []
-//l
 var cerclesConfiance = []
 
-
-var pgE
-var pgC
-
-var timeStart
-var timeAnim
-var rouge = 0
-var vert = 0
-var bleu = 0
-var xpos
-var ypos
-var xtarget
-var ytarget
-var NUMSINES
-var fund
-var sines = new Array(NUMSINES); // an array to hold all the current angles
-var rad; // an initial radius value for the central sine
-
-var seed  = 1234;
+var pg,pgE,pgC
 
 //o
 var amppX = 50
@@ -77,18 +39,30 @@ var radiusQ = 50
 var sizeX = 0
 var sizeY = 0
 
-//palette de couleur
+//palettes de couleur
 var palette = []
 var randomColor
+var lineColor = []
+
+//animA
 var colorsCircles = []
+var randomColor = []
+var orientationA = []
+var directionA = []
 
-//c
+var redR = [] 
+var greenR = [] 
+var blueR = []
+var couleurF,couleurG,couleurH,couleurI,couleurJ,couleurK,couleurM,couleurN,couleurP,couleurP,couleurT,couleurU,couleurV,couleurY
+
+var x1H = []
+var x2H = []
+var directionJ
+
+//c & q
 var springs = []
-
-//q
 var springQ = []
 
-var loop 
 
 function preload() {
     soundA = loadSound("assets/mannishboy_riff.wav")
@@ -174,6 +148,9 @@ function setup() {
     palette[6] = color(30, 25, 106)
     palette[7] = color(241, 101, 39)
 
+    lineColor[0] = color(232,223,205,15)
+    lineColor[1] = color(171,4,21,15)
+
 
 
     xpos = 200
@@ -191,25 +168,11 @@ function setup() {
     pgE = createGraphics(width, height)
     pgC = createGraphics(width, height)
 
-
-    //pour animI
-    position1 = createVector(0, 0)
-    position2 = createVector(0, 150)
-    velocity = p5.Vector.random2D()
-    velocity.mult(4)
-
-    //anim pour faire pivoter plusieurs objets en même temps
-    NUMSINES = 20; // how many of these things can we do at once?
-    fund = 0.005; // the speed of the central sine    
-    rad = height / 4; // compute radius for central circle
-    for (let i = 0; i < sines.length; i++) {
-        sines[i] = PI; // start EVERYBODY facing NORTH
-    }
 }
 
 function draw() {
     randomSeed(seed);
-    background(rouge, vert, bleu, 40)
+    background(0, 40)
     
     //to display instructions if no sounds have been played since 3sec
     //afficherInstructions()
@@ -246,7 +209,7 @@ function draw() {
     //only one except, because this animation change background color
     if (soundL.currentTime() < soundL.duration() - 0.1 && soundL.currentTime() > 0) {
         animL()
-    }
+    } else background(0,40)
     //is loop activated ?
     if (loop){
         soundA.setLoop(true)
@@ -286,6 +249,10 @@ function draw() {
         animO()
     }
 
+    if (soundG.currentTime() < soundG.duration() - 0.1 && soundG.currentTime() > 0) {
+        animG()
+    }
+
     if (soundB.currentTime() < soundB.duration() - 0.1 && soundB.currentTime() > 0) {
         animB()
     } 
@@ -296,16 +263,10 @@ function draw() {
         springs = []
     }
 
-    if (soundD.currentTime() < soundD.duration() - 0.1 && soundD.currentTime() > 0) {
-        animD()
-    }
-
     if (soundF.currentTime() < soundF.duration() - 0.1 && soundF.currentTime() > 0) {
         animF()
     }
-    if (soundG.currentTime() < soundG.duration() - 0.1 && soundG.currentTime() > 0) {
-        animG()
-    }
+
     if (soundH.currentTime() < soundH.duration() - 0.1 && soundH.currentTime() > 0) { //h
         animH()
     }
@@ -371,6 +332,10 @@ function draw() {
         animY()
     }
 
+    if (soundD.currentTime() < soundD.duration() - 0.1 && soundD.currentTime() > 0) {
+        animD()
+    }
+
   
       
 } //loop
@@ -384,8 +349,9 @@ function afficherInstructions(){
 
 */
 
+//to avoid changes during the play of the sound due to use of random() method
 function keyPressed(){
- // activzate / desactivate loop condition for 4 backings tracks
+ // activate / desactivate loop condition for 4 backings tracks
  if(keyCode === ENTER){
     if(loop){
         console.log("loop désactivée")
@@ -395,6 +361,86 @@ function keyPressed(){
         loop = 1
     }
   }
+
+  if(keyIsDown(65) ==true){
+    for (let i = 0; i < 4; i++) {
+        colorsCircles[i] = random(palette)
+    }
+
+        //setup of the colors and rotations of forms
+      for (let i = 0; i < 4; i++) {
+          colorsCircles[i] = random(palette)
+      }
+      for (let j = 0; j < height / 2; j = j + 35) {
+          randomColor[j] = random(colorsCircles)
+          orientationA[j] = random(j)
+          directionA[j] = direction = int(random(0, 2) < 1) ? 1 : -1
+      }
+      
+   }
+ 
+  if(keyIsDown(70) ==true){
+    couleurF = random(palette)
+ }
+ 
+ if(keyIsDown(71) ==true){
+    couleurG = random(palette)
+ }
+
+ if(keyIsDown(72) ==true){
+    for (let w = 0; w < width; w = w = w + 200) {
+    x1H[w] = random(width) 
+    x2H[w] =  random(width) 
+    }
+    couleurH = random(palette)
+ }
+
+ if(keyIsDown(73) ==true){
+    couleurI = random(palette)
+ }
+
+ if(keyIsDown(74) ==true){
+    couleurJ = random(palette)
+    directionJ = random(TWO_PI) //toujours perturbé par les autres random, pourquoi ?
+ }
+
+ if(keyIsDown(75) ==true){
+    couleurK = random(palette)
+ }
+
+ if(keyIsDown(77) ==true){
+    couleurM = random(palette)
+ }
+
+ if(keyIsDown(78) ==true){
+    couleurN = random(lineColor)
+ }
+
+ if(keyIsDown(80) ==true){
+    couleurP = random(palette)
+ }
+ 
+ if(keyIsDown(82) ==true){
+    redR =  random(80)
+    greenR = random(250)
+    blueR = random(255)
+ }
+
+ if(keyIsDown(84) ==true){
+    couleurT = random(palette)
+ }
+
+ if(keyIsDown(85) ==true){
+    couleurU = random(palette)
+ }
+
+ if(keyIsDown(86) ==true){
+    couleurV = random(palette)
+ }
+
+ if(keyIsDown(89) ==true){
+    couleurY = random(palette)
+ }
 }
 
 function musicPlay(sound, keyID) {
@@ -409,6 +455,8 @@ function musicPlay(sound, keyID) {
             sound.play()
         }
     } //ifkeydown
+
+
 }
 
 function windowResized() {
@@ -427,26 +475,21 @@ function animA() {
 
     //select only 4 colors in the palette available
     let angle = TWO_PI / 80
-    for (let i = 0; i < 4; i++) {
-        colorsCircles[i] = random(palette)
-    }
 
     //define one color + angle per circle, sometimes many side by side can be of the same color
-    for (let j = 0; j < height / 2; j = j + 40) {
-        randomColor = random(colorsCircles)
+    for (let j = 0; j < height / 2; j = j + 35) {
+        //randomColor = random(colorsCircles)
 
         push()
-        rotate(random(j))
+        rotate(orientationA[j])
         noFill()
-        strokeWeight(40)
+        strokeWeight(4)
         strokeCap(SQUARE)
-        stroke(randomColor)
+        stroke(randomColor[j])
 
         //change their position proportionally to the bass freq with randomly direction
-        let direction = int(random(0, 2) < 1) ? 1 : -1
-
         push()
-        if (basses > 225) rotate(map(basses, 0, 255, PI / 8, TWO_PI) * direction)
+        if (basses > 225) rotate(map(basses, 0, 255, PI / 8, TWO_PI) * directionA[j])
         //display circles
         beginShape()
         for (let i = 0; i < 72; i++) {
@@ -458,7 +501,7 @@ function animA() {
         pop()
         pop()
     }
-    pop()
+pop()
 }
 
 
@@ -544,7 +587,7 @@ function animD() {
     fill(232,223,195)
     noStroke()
     rect(x, y, 25, 25, 2)
-    fill(171,4,41)
+    fill(171,4,21)
     rect(x2, y2, 25, 25, 2)
     pop()
 }
@@ -594,7 +637,7 @@ function animF() {
     push()
     noFill()
     strokeWeight(2)
-    stroke(random(palette))
+    stroke(couleurF)
     translate(0, height / 2)
     for (let i = 1; i < currentPoint + 1; i++) {
 
@@ -609,7 +652,7 @@ function animG() {
     push()
     var levelG = map(amplitudeG.getLevel(), 0, 0.08772784950665151, 0, 100)
     let posX = map(soundG.currentTime(), 0, soundG.duration(), 0, width)
-    stroke(256, 30, 45)
+    stroke(couleurG)
     strokeWeight(30)
     if (levelG > 60) line(posX, 0, posX, height)
     pop()
@@ -619,7 +662,7 @@ function animH() {
     push()
     noFill()
     strokeWeight(5)
-    stroke(random(palette))
+    stroke(couleurH)
     soundHFFT.analyze()
     let middle = soundHFFT.getEnergy("highMid")
     //  console.log(middle)
@@ -629,7 +672,7 @@ function animH() {
     for (let w = 0; w < width; w = w = w + 200) {
         //change their position proportionally to the bass freq with randomly direction
         let direction = int(random(0, 2) < 1) ? 1 : -1
-        line(random(width) + (varX * direction), 0, random(width) + (varX * direction), height)
+        line(x1H[w] + (varX * direction), 0, x2H[w] + (varX * direction), height)
     }
     pop()
 }
@@ -640,7 +683,7 @@ function animI() { //i
     var length = map(levelI, 0, 0.042, 0, width / 10)
     push()
     noStroke()
-    fill(random(palette))
+    fill(couleurI)
     translate(width / 2, 0)
     //cacher la fin du son qui n'est plus audible
     if (soundI.currentTime() < soundI.duration()) {
@@ -664,11 +707,11 @@ function animJ() { //j
 
     push()
     noStroke()
-    fill(random(palette))
+    fill(couleurJ)
     //placer le point d'origine dans un cercle de 50px autour du centre de l'écran
     translate(random((width / 2) - 50, (width / 2) + 50), random((height / 2) + 50, (height / 2) - 50))
     //angle de lancé alétoire
-    rotate(random(TWO_PI))
+    rotate(directionJ)
     for (let i = 0; i < 15; i++) {
         xtarget = random(100, 500)
         ytarget = random(-100, 100)
@@ -686,8 +729,7 @@ function animK() {
     time = constrain(time, 0, 1)
     let before = lerp(width / 6, 5 * width / 6, time)
     let after = map(soundK.currentTime(), 0, soundK.duration(), width / 8, 5 * (width / 6)) // départ plus proche du bord pour éviter l'impression de décentrage
-    console.log("after : " + after)
-    stroke(random(palette))
+    stroke(couleurK)
     strokeWeight(height / 8)
     strokeCap(SQUARE)
     noFill()
@@ -706,7 +748,7 @@ function animM() {
     if (width < height) radius = width / 3
     else radius = height / 3
 
-    stroke(random(palette))
+    stroke(couleurM)
     strokeWeight(5)
     noFill()
     strokeJoin(ROUND)
@@ -725,7 +767,7 @@ function animM() {
 }
 
 function animN() {
-    // randomSeed(455)
+    
     push()
     translate(width / 2, height / 2)
     for (let i = 0; i <= 6000; i++) {
@@ -733,7 +775,7 @@ function animN() {
         var angle = map(soundN.currentTime(), 0, soundN.duration(), 2, TWO_PI * 2) * i / 4000
         var x = cos(angle) * ((cos(angle)) - 10 * cos(4 * angle) - pow(sin(angle / 4), 15)) * 40
         var y = sin(angle) * ((cos(angle)) - 10 * cos(4 * angle) - pow(sin(angle / 4), 15)) * 40
-        stroke(255, 15)
+        stroke(couleurN)
         strokeWeight(1)
         noFill()
         push()
@@ -765,7 +807,7 @@ function animP() {
     push()
     let x = map(soundP.currentTime(), 0, soundP.duration(), 0, width)
     noStroke()
-    fill(random(palette), 30)
+    fill(couleurP, 30)
     for (let i = height / 4; i < height; i = i + (height / 4)) {
         let y = i + (sin(x) * 20)
         ellipse(x, y, 20, 20)
@@ -790,7 +832,7 @@ function animR() {
         push()
         noFill()
         strokeWeight(2)
-        stroke(random(80), random(250), random(255))
+        stroke(redR[i],greenR[i],blueR[i])
         translate(random(width), random(height))
         rotate(frameCount / 10 + i)
         rect(0, 0, 200, 50, 10)
@@ -841,7 +883,7 @@ function animT() {
         y = map(levelT, 0, 0.2, 50, height)
     }
     noStroke()
-    fill(random(palette))
+    fill(couleurT)
     ellipse(x, y, size, size)
 
     pop()
@@ -851,10 +893,9 @@ function animT() {
 function animU() { //u
     push()
     translate(width / 2, height / 2)
-    let couleur = random(palette)
     let nombrePoints = 1500
     let apparition = map(soundU.currentTime(), 0, soundU.duration() * 0.76, 0, nombrePoints)
-    stroke(couleur)
+    stroke(couleurU)
     strokeWeight(1)
     noFill()
 
@@ -875,7 +916,7 @@ function animU() { //u
 function animV() {
     //circle morph
     push()
-    fill(random(palette))
+    fill(couleurV)
     noStroke()
     var levelV = amplitudeV.getLevel()
     amppY += 0.05
@@ -937,7 +978,6 @@ function animX() {
 function animY() {
     push()
     t = map(soundY.currentTime(), 0, 3.05, 4 * TWO_PI, 0)
-    let couleur = random(palette)
 
     radiusY = map(soundY.currentTime(), 0, 3.05, (height / 2) - 50, 0)
     let sinval = +sin(t)
@@ -950,12 +990,12 @@ function animY() {
         //h += 0.001 noise foireux à corriger
         x = (width / 2)
         y = (height / 2)
-        stroke(couleur)
+        stroke(couleurY)
         strokeWeight(map(soundY.currentTime(), 3.05, soundY.duration(), 2, 5))
         noFill()
     } else {
         noStroke()
-        fill(couleur)
+        fill(couleurY)
     }
     ellipse(x, y, taille, taille)
     pop()
