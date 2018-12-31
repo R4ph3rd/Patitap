@@ -541,10 +541,10 @@ function animD() {
     let y = (height / 2) + (sinval * radiusL)
     let x2 = x + cos(angleL * sx) * radiusL / 2
     let y2 = y + sin(angleL * sy) * radiusL / 2
-    fill(255)
+    fill(232,223,195)
     noStroke()
     rect(x, y, 25, 25, 2)
-    fill(225, 0, 0)
+    fill(171,4,41)
     rect(x2, y2, 25, 25, 2)
     pop()
 }
@@ -697,7 +697,7 @@ function animK() {
 
 function animL() { //l
     let transp = map(soundL.currentTime(), 0, soundL.duration() - 0.2, 100, 0)
-    background(93, 79, 89, transp)
+    background(73, 19, 109, transp)
 }
 
 function animM() {
