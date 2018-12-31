@@ -17,7 +17,7 @@
 
           //compare à toutes les positions des rectangles déjà affichés
           this.overlapping = false
-          for (var i = 0; i < biscottes.length; i++) {
+          for (let i = 0; i < biscottes.length; i++) {
               if (abs(this.x - biscottes[i].x) < Xrect + 5 && abs(this.y - biscottes[i].y) < Yrect + 5) {
                   //if( dist(this.x, this.y, biscottes[i].x, biscottes[i].y ) 
                   //   < sqrt(pow(this.x - biscottes[i].x, 2) + pow(this.y - biscottes[i].y, 2))){
@@ -39,7 +39,7 @@
       
       this.display = function (pg) {
           pg.noStroke()
-          pg.fill(220, this.transparence)
+          pg.fill(232,223,205, this.transparence)
           pg.rectMode(CENTER)
           pg.rect(this.x, this.y, Xrect, Yrect, 15)
       }
