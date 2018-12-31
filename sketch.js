@@ -3,7 +3,7 @@ document.addEventListener('keypress', (event) => {
     document.getElementById('instructions').style.display = "none";
   })
 
-//issues : animZ breaked, randomSeed reset for all each new play of sound
+//issues : randomSeed reset for all each new play of sound
 
 var amplitudeMaster
 var levelMaster 
@@ -14,7 +14,6 @@ var amplitudeD;
 var amplitudeK
 var amplitudeF
 var amplitudeE
-var amplitudeZ
 var amplitudeG
 var amplitudeT
 var amplitudeV
@@ -143,8 +142,6 @@ function setup() {
     amplitudeI.setInput(soundI)
     amplitudeE = new p5.Amplitude()
     amplitudeE.setInput(soundE)
-    amplitudeZ = new p5.Amplitude()
-    amplitudeZ.setInput(soundZ)
     amplitudeG = new p5.Amplitude()
     amplitudeG.setInput(soundG)
     amplitudeT = new p5.Amplitude()
@@ -272,6 +269,10 @@ function draw() {
     }
     if (soundZ.currentTime() < soundZ.duration() - 0.1 && soundZ.currentTime() > 0) {
         animZ()
+    } else {
+        pg.clear()
+        biscottes = []
+        transparence = 100
     }
 
     if (soundR.currentTime() < soundR.duration() - 0.1 && soundR.currentTime() > 0) {
@@ -281,13 +282,13 @@ function draw() {
 
 
     //then short animations
+    if (soundO.currentTime() < soundO.duration() - 0.1 && soundO.currentTime() > 0) {
+        animO()
+    }
+
     if (soundB.currentTime() < soundB.duration() - 0.1 && soundB.currentTime() > 0) {
         animB()
-    } else {
-        pg.clear()
-        biscottes = []
-        transparence = 100
-    }
+    } 
 
     if (soundC.currentTime() < soundC.duration() - 0.1 && soundC.currentTime() > 0) {
         animC()
@@ -308,13 +309,11 @@ function draw() {
     if (soundH.currentTime() < soundH.duration() - 0.1 && soundH.currentTime() > 0) { //h
         animH()
     }
+
+
     if (soundI.currentTime() < soundI.duration() - 0.1 && soundI.currentTime() > 0) { //i
         animI()
-    } else {
-        rouge = 0
-        vert = 0
-        bleu = 0
-    }
+    } 
 
     if (soundT.currentTime() < soundT.duration() - 0.1 && soundT.currentTime() > 0) {
         animT()
@@ -334,10 +333,6 @@ function draw() {
 
     if (soundN.currentTime() < soundN.duration() - 0.1 && soundN.currentTime() > 0) {
         animN()
-    }
-
-    if (soundO.currentTime() < soundO.duration() - 0.1 && soundO.currentTime() > 0) {
-        animO()
     }
 
     if (soundP.currentTime() < soundP.duration() - 0.1 && soundP.currentTime() > 0) {
@@ -968,17 +963,14 @@ function animY() {
 
 
 function animZ() {
-    var levelZ = amplitudeZ.getLevel()
-    //console.log(levelZ)
-    var displayy = map(levelZ, 0, 0.07528338223373322, 0, 100)
     pg.clear()
-
-    if (displayy > 55) { //conditon d'affichage : si amplitude sonore > 85 %
+    if (frameCount % 24 == 0) { //almost the perfect tempo corresponding to the real tempo of the song 
         biscottes.push(new biscotte())
     }
-     console.log("length=  " +biscottes.length)
+     //console.log("length=  " +biscottes.length)
+     //plop le compteur de boucle du désespoir
     for ( plop = 0; plop < biscottes.length; plop++) {
-        console.log("boucle for " + plop)
+       // console.log("boucle for " + plop)
         biscottes[plop].update(); // update biscotte transparency
         biscottes[plop].display(pg); // draw new biscotte
         //erase biscotte if it's too much transparent
