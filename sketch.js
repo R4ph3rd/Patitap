@@ -1,14 +1,14 @@
 //to hide instructions
 document.addEventListener('keypress', (event) => {
     document.getElementById('instructions').style.display = "none";
-  })
+})
 
 //issues : randomSeed reset for all each new play of sound, so colors or orientations can change
 
 var amplitudeMaster
-var levelMaster 
-var seed  = 1234;
-var loop 
+var levelMaster
+var seed = 1234;
+var loop
 
 var amplitudeA, amplitudeB, amplitudeD, amplitudeK, amplitudeF, amplitudeE, amplitudeG, amplitudeT, amplitudeV
 var soundAFFT, soundSFFT, soundCFFT, soundTFFT, soundQFFT, soundHFFT
@@ -17,7 +17,7 @@ var biscottes = []
 var cordes = []
 var cerclesConfiance = []
 
-var pg,pgE,pgC
+var pg, pgE, pgC
 
 //o
 var amppX = 50
@@ -45,10 +45,10 @@ var palette = []
 var randomColor
 var lineColor = []
 
-var redR = [] 
-var greenR = [] 
+var redR = []
+var greenR = []
 var blueR = []
-var couleurF,couleurG,couleurH,couleurI,couleurJ,couleurK,couleurM,couleurN,couleurP,couleurP,couleurT,couleurU,couleurV,couleurY
+var couleurF, couleurG, couleurH, couleurI, couleurJ, couleurK, couleurM, couleurN, couleurP, couleurP, couleurT, couleurU, couleurV, couleurY
 
 //animA
 var colorsCircles = []
@@ -65,6 +65,8 @@ var directionJ
 //c & q
 var springs = []
 var springQ = []
+
+var backgingtrack_empty
 
 
 function preload() {
@@ -102,7 +104,7 @@ function setup() {
     pixelDensity(1)
     //no loop of backing tracks
     loop = 0
-    
+
     //tous les analysers de son
     amplitudeMaster = new p5.Amplitude()
 
@@ -150,8 +152,8 @@ function setup() {
     palette[6] = color(30, 25, 106)
     palette[7] = color(241, 101, 39)
 
-    lineColor[0] = color(232,223,205,15)
-    lineColor[1] = color(171,4,21,15)
+    lineColor[0] = color(232, 223, 205, 15)
+    lineColor[1] = color(171, 4, 21, 15)
 
 
 
@@ -175,15 +177,20 @@ function setup() {
 function draw() {
     randomSeed(seed);
     background(0, 40)
-    
+
     //to display instructions if no sounds have been played since 3sec
     levelMaster = amplitudeMaster.getLevel()
 
+    //backing tracks
     musicPlay(soundA, 65) //a
+    musicPlay(soundZ, 90) //z
+    musicPlay(soundE, 69) //e
+    musicPlay(soundR, 82) //r
+
+    //others
     musicPlay(soundB, 66) //b
     musicPlay(soundC, 67) //c
-    musicPlay(soundD, 68) //d
-    musicPlay(soundE, 69) //e
+    musicPlay(soundD, 68) //d 
     musicPlay(soundF, 70) //f
     musicPlay(soundG, 71) //g
     musicPlay(soundH, 72) ////h
@@ -196,7 +203,6 @@ function draw() {
     musicPlay(soundO, 79) //o
     musicPlay(soundP, 80) //p
     musicPlay(soundQ, 81) //q
-    musicPlay(soundR, 82) //r
     musicPlay(soundS, 83) //s
     musicPlay(soundT, 84) //t
     musicPlay(soundU, 85) //u
@@ -204,10 +210,26 @@ function draw() {
     musicPlay(soundW, 87) //w 
     musicPlay(soundX, 88) //x
     musicPlay(soundY, 89) //y
-    musicPlay(soundZ, 90) //z
 
-       //is loop activated ?
-       if (loop){
+    /*  if (soundA.isPlaying() == true){
+          
+      }
+      
+      if (soundZ.isPlaying() == true){
+          
+      }
+      
+      if (soundE.isPlaying() == true){
+          
+      }
+      
+      if (soundR.isPlaying() == true){
+          
+      }*/
+
+
+    //is loop activated ?
+    if (loop) {
         soundA.setLoop(true)
         soundZ.setLoop(true)
         soundE.setLoop(true)
@@ -219,11 +241,15 @@ function draw() {
         soundR.setLoop(false)
     }
 
+
+
+
     // first, in foreground, riffs wich can be repeated as sound background
     //only one except, because this animation change background color
     if (soundL.currentTime() < soundL.duration() - 0.1 && soundL.currentTime() > 0) {
         animL()
-    } else background(0,40)
+    } else background(0, 40)
+
 
     if (soundE.currentTime() < soundE.duration() - 0.1 && soundE.currentTime() > 0) {
         animE()
@@ -231,6 +257,7 @@ function draw() {
     if (soundA.currentTime() < soundA.duration() - 0.1 && soundA.currentTime() > 0) {
         animA()
     }
+
     if (soundZ.currentTime() < soundZ.duration() - 0.1 && soundZ.currentTime() > 0) {
         animZ()
     } else {
@@ -255,7 +282,7 @@ function draw() {
 
     if (soundB.currentTime() < soundB.duration() - 0.1 && soundB.currentTime() > 0) {
         animB()
-    } 
+    }
 
     if (soundC.currentTime() < soundC.duration() - 0.1 && soundC.currentTime() > 0) {
         animC()
@@ -271,19 +298,19 @@ function draw() {
 
     if (soundI.currentTime() < soundI.duration() - 0.1 && soundI.currentTime() > 0) { //i
         animI()
-    } 
+    }
 
     if (soundT.currentTime() < soundT.duration() - 0.1 && soundT.currentTime() > 0) {
         animT()
     }
-    
+
     if (soundK.currentTime() < soundK.duration() - 0.1 && soundK.currentTime() > 0) {
         animK()
     }
 
     if (soundJ.currentTime() < soundJ.duration() - 0.1 && soundJ.currentTime() > 0) {
         animJ()
-    } 
+    }
 
     if (soundM.currentTime() < soundM.duration() - 0.1 && soundM.currentTime() > 0) {
         animM()
@@ -330,124 +357,154 @@ function draw() {
     }
 } //loop
 
-/*
-function afficherInstructions(){
-    var timer=millis()
-
-    if((timer > 3000) && (levelMaster == 0)){} console.log("on est là !")//document.getElementById('instructions').style.display = "block";
-}
-
-*/
 
 //to avoid changes during the play of the sound due to use of random() method
-function keyPressed(){
- // activate / desactivate loop condition for 4 backings tracks
- if(keyCode === ENTER){
-    if(loop){
-        console.log("loop désactivée")
-        loop = 0
-    } else {
-        console.log("loop activée")
-        loop = 1
+function keyPressed() {
+    // activate / desactivate loop condition for 4 backings tracks
+    if (keyCode === ENTER) {
+        if (loop) {
+            console.log("loop désactivée")
+            loop = 0
+        } else {
+            console.log("loop activée")
+            loop = 1
+        }
     }
-  }
 
-  if(keyIsDown(65) ==true){
-    for (let i = 0; i < 4; i++) {
-        colorsCircles[i] = random(palette)
-    }
+        //backing tracks animations
+    if (keyIsDown(65) == true) {
+        for (let i = 0; i < 4; i++) {
+            colorsCircles[i] = random(palette)
+            //only one backing track at the same time is available, because others sounds change depeding on it 
+            if ((soundZ.isPlaying() == true) || (soundE.isPlaying() == true) || (soundR.isPlaying() == true)) {
+                //console.log("backingtrack")
+                soundZ.stop()
+                soundE.stop()
+                soundR.stop()
+            }
+        }
 
         //setup of the colors and rotations of forms
-      for (let i = 0; i < 4; i++) {
-          colorsCircles[i] = random(palette)
-      }
-      for (let j = 0; j < height / 2; j = j + 35) {
-          randomColor[j] = random(colorsCircles)
-          orientationA[j] = random(j)
-          directionA[j] = direction = int(random(0, 2) < 1) ? 1 : -1
-      }
-      
-   }
- 
-  if(keyIsDown(70) ==true){
-    couleurF = random(palette)
- }
- 
- if(keyIsDown(71) ==true){
-    couleurG = random(palette)
- }
+        for (let i = 0; i < 4; i++) {
+            colorsCircles[i] = random(palette)
+        }
+        for (let j = 0; j < height / 2; j = j + 35) {
+            randomColor[j] = random(colorsCircles)
+            orientationA[j] = random(j)
+            directionA[j] = direction = int(random(0, 2) < 1) ? 1 : -1
+        }
 
- if(keyIsDown(72) ==true){
-    for (let w = 0; w < width; w = w = w + 200) {
-    x1H[w] = random(width) 
-    x2H[w] =  random(width) 
     }
-    couleurH = random(palette)
- }
 
- if(keyIsDown(73) ==true){
-    couleurI = random(palette)
- }
-
- if(keyIsDown(74) ==true){
-    couleurJ = random(palette)
-    directionJ = random(TWO_PI) //toujours perturbé par les autres random, pourquoi ?
- }
-
- if(keyIsDown(75) ==true){
-    couleurK = random(palette)
- }
-
- if(keyIsDown(77) ==true){
-    couleurM = random(palette)
- }
-
- if(keyIsDown(78) ==true){
-    couleurN = random(lineColor)
- }
-
- if(keyIsDown(80) ==true){
-    couleurP = random(palette)
- }
- 
- if(keyIsDown(82) ==true){
-    for (let i = 0; i < 25; i++) {
-    redR[i] =  random(80)
-    greenR[i] = random(250)
-    blueR[i] = random(255)
-    xR[i] = random(width)
-    yR[i] = random(height)
+    if (keyIsDown(69) == true) {
+        if ((soundA.isPlaying() == true) || (soundZ.isPlaying() == true) || (soundR.isPlaying() == true)) {
+            //console.log("backingtrack")
+            soundA.stop()
+            soundZ.stop()
+            soundR.stop()
+        }
     }
-}
 
- if(keyIsDown(84) ==true){
-    couleurT = random(palette)
- }
+    if (keyIsDown(82) == true) {
+        for (let i = 0; i < 25; i++) {
+            redR[i] = random(80)
+            greenR[i] = random(250)
+            blueR[i] = random(255)
+            xR[i] = random(width)
+            yR[i] = random(height)
+        }
+        //only one backing track at the same time
+        if ((soundZ.isPlaying() == true) || (soundE.isPlaying() == true) || (soundA.isPlaying() == true)) {
+            //console.log("backingtrack")
+            soundZ.stop()
+            soundE.stop()
+            soundA.stop()
+        }
+    }
+    
+        if (keyIsDown(90) == true) {
+        if ((soundA.isPlaying() == true) || (soundE.isPlaying() == true) || (soundR.isPlaying() == true)) {
+            //console.log("backingtrack")
+            soundA.stop()
+            soundE.stop()
+            soundR.stop()
+        }
+    }
 
- if(keyIsDown(85) ==true){
-    couleurU = random(palette)
- }
+    //others animations
+    if (keyIsDown(70) == true) {
+        couleurF = random(palette)
+    }
 
- if(keyIsDown(86) ==true){
-    couleurV = random(palette)
- }
+    if (keyIsDown(71) == true) {
+        couleurG = random(palette)
+    }
 
- if(keyIsDown(89) ==true){
-    couleurY = random(palette)
- }
+    if (keyIsDown(72) == true) {
+        for (let w = 0; w < width; w = w = w + 200) {
+            x1H[w] = random(width)
+            x2H[w] = random(width)
+        }
+        couleurH = random(palette)
+    }
+
+    if (keyIsDown(73) == true) {
+        couleurI = random(palette)
+    }
+
+    if (keyIsDown(74) == true) {
+        couleurJ = random(palette)
+        directionJ = random(TWO_PI) //toujours perturbé par les autres random, pourquoi ?
+    }
+
+    if (keyIsDown(75) == true) {
+        couleurK = random(palette)
+    }
+
+    if (keyIsDown(77) == true) {
+        couleurM = random(palette)
+    }
+
+    if (keyIsDown(78) == true) {
+        couleurN = random(lineColor)
+    }
+
+    if (keyIsDown(80) == true) {
+        couleurP = random(palette)
+    }
+
+    if (keyIsDown(84) == true) {
+        couleurT = random(palette)
+    }
+
+    if (keyIsDown(85) == true) {
+        couleurU = random(palette)
+    }
+
+    if (keyIsDown(86) == true) {
+        couleurV = random(palette)
+    }
+
+    if (keyIsDown(89) == true) {
+        couleurY = random(palette)
+    }
 }
 
 function musicPlay(sound, keyID) {
 
     if (keyIsDown(keyID) == true) {
         seed = random(9999)
-      //  afficherInstructions()
+
         if (sound.isPlaying() == true) {
             sound.stop()
             sound.play()
+
         } else {
             sound.play()
         }
+
+
+
     } //ifkeydown
 
 
@@ -495,7 +552,7 @@ function animA() {
         pop()
         pop()
     }
-pop()
+    pop()
 }
 
 
@@ -555,7 +612,7 @@ function animC() {
     push()
     soundCFFT.analyze()
     let middle = soundCFFT.getEnergy("mid")
-   // console.log(middle)
+    // console.log(middle)
     let middleSpring = map(middle, 105, 249, -(height / 4), height / 4)
     let timeline = map(soundC.currentTime(), 0, soundC.duration() * 0.65, 50, width - 50)
     //add new spring for each excess of the energy of the range of freq
@@ -578,10 +635,10 @@ function animD() {
     let y = (height / 2) + (sinval * radiusL)
     let x2 = x + cos(angleL * sx) * radiusL / 2
     let y2 = y + sin(angleL * sy) * radiusL / 2
-    fill(232,223,195)
+    fill(232, 223, 195)
     noStroke()
     rect(x, y, 25, 25, 2)
-    fill(171,4,21)
+    fill(171, 4, 21)
     rect(x2, y2, 25, 25, 2)
     pop()
 }
@@ -691,7 +748,7 @@ function animI() { //i
 }
 
 function animJ() { //j
-    
+
     //jet de cocobilles
     let t = map(soundJ.currentTime(), 0, soundJ.duration() * 0.60, 0, 1)
     t = constrain(t, 0, 1)
@@ -761,7 +818,7 @@ function animM() {
 }
 
 function animN() {
-    
+
     push()
     translate(width / 2, height / 2)
     for (let i = 0; i <= 6000; i++) {
@@ -826,8 +883,8 @@ function animR() {
         push()
         noFill()
         strokeWeight(2)
-        stroke(redR[i],greenR[i],blueR[i])
-        translate(xR[i],yR[i])
+        stroke(redR[i], greenR[i], blueR[i])
+        translate(xR[i], yR[i])
         rotate(frameCount / 10 + i)
         rect(0, 0, 200, 50, 10)
         pop()
@@ -853,7 +910,7 @@ function animS() {
     stroke(176, 17, 65)
     push()
     translate(width / 4 + x, height + y)
-    rotate(frameCount / 10 )
+    rotate(frameCount / 10)
     rect(0, 0, 50, 50)
     pop()
     pop()
@@ -1001,10 +1058,10 @@ function animZ() {
     if (frameCount % 24 == 0) { //almost the perfect tempo corresponding to the real tempo of the song 
         biscottes.push(new biscotte())
     }
-     //console.log("length=  " +biscottes.length)
-     //plop le compteur de boucle du désespoir
-    for ( plop = 0; plop < biscottes.length; plop++) {
-       // console.log("boucle for " + plop)
+    //console.log("length=  " +biscottes.length)
+    //plop le compteur de boucle du désespoir
+    for (plop = 0; plop < biscottes.length; plop++) {
+        // console.log("boucle for " + plop)
         biscottes[plop].update(); // update biscotte transparency
         biscottes[plop].display(pg); // draw new biscotte
         //erase biscotte if it's too much transparent
