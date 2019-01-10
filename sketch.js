@@ -5,6 +5,10 @@ var seed = 1234;
 //backing tracks loops
 var loop
 
+//essaie donc !
+var berenger = new String(6669826978716982)
+var easteregg = new String
+
 var amplitudeA, amplitudeB, amplitudeD, amplitudeK, amplitudeF, amplitudeE, amplitudeG, amplitudeT, amplitudeV
 var soundAFFT, soundCFFT, soundTFFT, soundQFFT, soundHFFT
 
@@ -199,7 +203,7 @@ function setup() {
     //no loop of backing tracks
     loop = 0
 
-  
+
 
     //tous les analysers de son
     amplitudeA = new p5.Amplitude()
@@ -249,35 +253,23 @@ function setup() {
     lineColor[0] = color(232, 223, 205, 15)
     lineColor[1] = color(171, 4, 21, 15)
 
-
-
     xpos = 200
     ypos = 7 * height / 8
-
-
     /* a = 150 / height
      b = 70 / width
 */
-    //pour anim2
+    //biscottes 
     Xrect = 0.043 * width
-    Yrect = 0.203804 * height //reponsive !
+    Yrect = 0.203804 * height
     pg = createGraphics(width, height)
 
     pgE = createGraphics(width, height)
     pgC = createGraphics(width, height)
-
 }
 
 function draw() {
     randomSeed(seed);
     background(0, 40)
-
-    //to display instructions if no sounds have been played since 3sec
-    currentTimer = millis()
-    //console.log("current = " + currentTimer + "            timer = " + timer)
-
-    if ((currentTimer > timer)) document.getElementById('instructions').style.display = "initial";
-
 
     //backing tracks
     musicPlay(soundA, 65) //a
@@ -308,6 +300,13 @@ function draw() {
     musicPlay(soundW, 87) //w 
     musicPlay(soundX, 88) //x
     musicPlay(soundY, 89) //y
+    
+    
+    //to display instructions if no sounds have been played since 3sec
+    //placé après musicPlay() qui reboote le timer, sans quoi la condition serait toujours valide car inchangée 
+    currentTimer = millis()
+    //console.log("current = " + currentTimer + "            timer = " + timer)
+    if ((currentTimer > timer)) document.getElementById('instructions').style.display = "initial";
 
     /*  if (soundA.isPlaying() == true){
           
@@ -461,7 +460,7 @@ function draw() {
 function keyPressed() {
     //hide instruction if a key is Pressed
     document.getElementById('instructions').style.display = "none";
-    
+
     // activate / desactivate loop condition for 4 backings tracks
     if (keyCode === ENTER) {
         if (loop) {
@@ -603,6 +602,9 @@ function keyPressed() {
     if (keyIsDown(89) == true) {
         couleurY = random(palette)
     }
+
+    //easter egg 
+    if (keyIsDown(66) == true) b = 1
 }
 
 function musicPlay(sound, keyID) {
@@ -612,7 +614,7 @@ function musicPlay(sound, keyID) {
 
         //to display instructions if no key is pressed for 5sec since the end of the last sound
         timer = millis() + 5000 + (sound.duration() * 1000) // temps actuel + 5 sec + durée du son
-       // console.log("timer = " + timer)
+        // console.log("timer = " + timer)
 
         if (sound.isPlaying() == true) {
             sound.stop()
@@ -676,13 +678,13 @@ function animB() {
     rectMode(CENTER)
     let levelB = amplitudeB.getLevel()
     console.log(levelB)
-    let seuil = map(levelB, 0,0.08187300869102197, 0, 100)
+    let seuil = map(levelB, 0, 0.08187300869102197, 0, 100)
     //retrecissement du rect interne par rapport à l'amp
     let miniX = map(levelB, 0, 0.08187300869102197, 50, 5)
     let miniY = map(levelB, 0, 0.08187300869102197, 180, 18)
     //grossissement du rect exterieur par rapport à l'amplitude
-    let maxX = map(levelB, 0,0.08187300869102197, 0, 50)
-    let maxY = map(levelB, 0,0.08187300869102197, 0, 180)
+    let maxX = map(levelB, 0, 0.08187300869102197, 0, 50)
+    let maxY = map(levelB, 0, 0.08187300869102197, 0, 180)
     let minicoin = map(levelB, 0, 0.08187300869102197, 0, 10)
 
 
@@ -763,7 +765,7 @@ function animE() {
     //polygone au nombre de faces changeant selon l'amplitude du son
     push()
     var levelE = amplitudeE.getLevel()
-     console.log(levelE)
+    console.log(levelE)
     translate(width / 2, height / 2)
     let vertices = map(levelE, 0, 0.19, 2, 50)
     let nbcircles = 80 // map (soundE.currentTime(),0,soundE.duration(),0,200)
