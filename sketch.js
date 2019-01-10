@@ -755,10 +755,10 @@ function animD() {
     let y = (height / 2) + (sinval * radiusL)
     let x2 = x + cos(angleL * sx) * radiusL / 2
     let y2 = y + sin(angleL * sy) * radiusL / 2
-    fill(232, 223, 195)
+    fill(235,223,89)
     noStroke()
     rect(x, y, 25, 25, 2)
-    fill(171, 4, 21)
+    fill(94,211,83)
     rect(x2, y2, 25, 25, 2)
     pop()
 }
@@ -771,7 +771,7 @@ function animE() {
     // console.log(levelE)
 
     translate(width / 2, height / 2)
-    let vertices = map(levelE, 0, 0.19, 2, 60)
+    let vertices = map(levelE, 0, 0.19, 2, 50)
     let nbcircles = 80 // map (soundE.currentTime(),0,soundE.duration(),0,200)
     let angle = TWO_PI / vertices
     noFill()
@@ -905,7 +905,7 @@ function animK() {
 
 function animL() { //l
     let transp = map(soundL.currentTime(), 0, soundL.duration() - 0.2, 100, 0)
-    background(73, 19, 119, transp)
+    background(59,66,86, transp)
 }
 
 function animM() {
@@ -959,14 +959,14 @@ function animO() {
     push()
     noFill()
     strokeWeight(1.5)
-    var levelO = amplitudeO.getLevel()
+    let levelO = amplitudeO.getLevel()
     amppY += 0.05 // pour déphaser les axes x et y des cercles
     amppX += 0.03
     let radiusX = map(levelO, 0, 0.1, 30, 350) * cos(amppX)
     let radiusY = map(levelO, 0, 0.1, 30, 350) * cos(amppY)
 
     for (let i = 0; i < 40; i++) {
-        var c = color(i * 4, 9, 154)
+        let c = color(i * 4, 9, 154)
         stroke(c)
         ellipse((width / 2), (height / 2), radiusX + (i * 15), radiusY + (i * 15))
     }
