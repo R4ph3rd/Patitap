@@ -3,8 +3,6 @@ document.addEventListener('keypress', (event) => {
     document.getElementById('instructions').style.display = "none";
 })
 
-//issues : randomSeed reset for all each new play of sound, so colors or orientations can change
-
 var amplitudeMaster
 var levelMaster
 var seed = 1234;
@@ -39,6 +37,12 @@ var radiusQ = 50
 var sizeX = 0
 var sizeY = 0
 
+//j
+let xtargetJ = []
+let ytargetJ = []
+var newOriginX
+var newOriginY
+
 //values set up in keyPressed() function
 //palettes de couleur
 var palette = []
@@ -66,15 +70,20 @@ var directionJ
 var springs = []
 var springQ = []
 
-var backgingtrack_empty
+//f
+var Ycircle = []
 
 
 function preload() {
-    soundA = loadSound("assets/mannishboy_riff.wav")
+    soundA = loadSound("assets/mannishboy.wav")
+    soundZ = loadSound("assets/stevieRAY.wav")
+    soundE = loadSound("assets/bbking_loop_jazzy.wav")
+    soundR = loadSound("assets/rythm_wahwah1.wav")
+
+    //sounds without backing tracks
     soundB = loadSound("assets/blueslick1.wav")
     soundC = loadSound("assets/merlin.wav")
     soundD = loadSound("assets/blues_lick_3.wav")
-    soundE = loadSound("assets/bbking_loop_jazzy.wav")
     soundF = loadSound("assets/feutre.wav")
     soundG = loadSound("assets/blues_double.wav")
     soundH = loadSound("assets/disco.wav")
@@ -87,7 +96,6 @@ function preload() {
     soundO = loadSound("assets/jump_wah_wah.wav")
     soundP = loadSound("assets/retour_lick.wav")
     soundQ = loadSound("assets/rebond_basse.wav")
-    soundR = loadSound("assets/rythm_wahwah.wav")
     soundS = loadSound("assets/slide_317.wav")
     soundT = loadSound("assets/dumiel.wav")
     soundU = loadSound("assets/watchtower_lick.wav")
@@ -95,7 +103,103 @@ function preload() {
     soundW = loadSound("assets/fin.wav")
     soundX = loadSound("assets/saute_de_veau.wav")
     soundY = loadSound("assets/tap_slide.wav")
-    soundZ = loadSound("assets/stevieRAY.wav")
+    /* 
+        //sounds for A track
+     soundB1 = loadSound("assets/soundsA/blueslick1.wav")
+     soundC1 = loadSound("assets/soundsA/merlin.wav")
+     soundD1 = loadSound("assets/soundsA/blues_lick_3.wav")
+     soundF1 = loadSound("assets/soundsA/feutre.wav")
+     soundG1 = loadSound("assets/soundsA/blues_double.wav")
+     soundH1 = loadSound("assets/soundsA/disco.wav")
+     soundI1 = loadSound("assets/soundsA/echo_micro.wav")
+     soundJ1 = loadSound("assets/soundsA/funky.wav")
+     soundK1 = loadSound("assets/soundsA/gratte_cuillere.wav")
+     soundL1 = loadSound("assets/soundsA/harmonique.wav")
+     soundM1 = loadSound("assets/soundsA/jimi.wav")
+     soundN1 = loadSound("assets/soundsA/j.bonamassa_lick.wav")
+     soundO1 = loadSound("assets/soundsA/jump_wah_wah.wav")
+     soundP1 = loadSound("assets/soundsA/retour_lick.wav")
+     soundQ1 = loadSound("assets/soundsA/rebond_basse.wav")
+     soundS1 = loadSound("assets/soundsA/slide_317.wav")
+     soundT1 = loadSound("assets/soundsA/dumiel.wav")
+     soundU1 = loadSound("assets/soundsA/watchtower_lick.wav")
+     soundV1 = loadSound("assets/soundsA/western.wav")
+     soundW1 = loadSound("assets/soundsA/fin.wav")
+     soundX1 = loadSound("assets/soundsA/saute_de_veau.wav")
+     soundY1 = loadSound("assets/soundsA/tap_slide.wav")
+     
+        //sounds for Z track
+     soundB2 = loadSound("assets/soundsZ/blueslick1.wav")
+     soundC2 = loadSound("assets/soundsZ/merlin.wav")
+     soundD2 = loadSound("assets/soundsZ/blues_lick_3.wav")
+     soundF2 = loadSound("assets/soundsZ/feutre.wav")
+     soundG2 = loadSound("assets/soundsZ/blues_double.wav")
+     soundH2 = loadSound("assets/soundsZ/disco.wav")
+     soundI2 = loadSound("assets/soundsZ/echo_micro.wav")
+     soundJ2 = loadSound("assets/soundsZ/funky.wav")
+     soundK2 = loadSound("assets/soundsZ/gratte_cuillere.wav")
+     soundL2 = loadSound("assets/soundsZ/harmonique.wav")
+     soundM2 = loadSound("assets/soundsZ/jimi.wav")
+     soundN2 = loadSound("assets/soundsZ/j.bonamassa_lick.wav")
+     soundO2 = loadSound("assets/soundsZ/jump_wah_wah.wav")
+     soundP2 = loadSound("assets/soundsZ/retour_lick.wav")
+     soundQ2 = loadSound("assets/soundsZ/rebond_basse.wav")
+     soundS2 = loadSound("assets/soundsZ/slide_317.wav")
+     soundT2 = loadSound("assets/soundsZ/dumiel.wav")
+     soundU2 = loadSound("assets/soundsZ/watchtower_lick.wav")
+     soundV2 = loadSound("assets/soundsZ/western.wav")
+     soundW2 = loadSound("assets/soundsZ/fin.wav")
+     soundX2 = loadSound("assets/soundsZ/saute_de_veau.wav")
+     soundY2 = loadSound("assets/soundsZ/tap_slide.wav")
+     
+        //soundsfor E track
+     soundB3 = loadSound("assets/soundsE/blueslick1.wav")
+     soundC3 = loadSound("assets/soundsE/merlin.wav")
+     soundD3 = loadSound("assets/soundsE/blues_lick_3.wav")
+     soundF3 = loadSound("assets/soundsE/feutre.wav")
+     soundG3 = loadSound("assets/soundsE/blues_double.wav")
+     soundH3 = loadSound("assets/soundsE/disco.wav")
+     soundI3 = loadSound("assets/soundsE/echo_micro.wav")
+     soundJ3 = loadSound("assets/soundsE/funky.wav")
+     soundK3 = loadSound("assets/soundsE/gratte_cuillere.wav")
+     soundL3 = loadSound("assets/soundsE/harmonique.wav")
+     soundM3 = loadSound("assets/soundsE/jimi.wav")
+     soundN3 = loadSound("assets/soundsE/j.bonamassa_lick.wav")
+     soundO3 = loadSound("assets/soundsE/jump_wah_wah.wav")
+     soundP3 = loadSound("assets/soundsE/retour_lick.wav")
+     soundQ3 = loadSound("assets/soundsE/rebond_basse.wav")
+     soundS3 = loadSound("assets/soundsE/slide_317.wav")
+     soundT3 = loadSound("assets/soundsE/dumiel.wav")
+     soundU3 = loadSound("assets/soundsE/watchtower_lick.wav")
+     soundV3 = loadSound("assets/soundsE/western.wav")
+     soundW3 = loadSound("assets/soundsE/fin.wav")
+     soundX3 = loadSound("assets/soundsE/saute_de_veau.wav")
+     soundY3 = loadSound("assets/soundsE/tap_slide.wav")
+     
+        //sounds for R track
+     soundB4 = loadSound("assets/soundsR/blueslick1.wav")
+     soundC4 = loadSound("assets/soundsR/merlin.wav")
+     soundD4 = loadSound("assets/soundsR/blues_lick_3.wav")
+     soundF4 = loadSound("assets/soundsR/feutre.wav")
+     soundG4 = loadSound("assets/soundsR/blues_double.wav")
+     soundH4 = loadSound("assets/soundsR/disco.wav")
+     soundI4 = loadSound("assets/soundsR/echo_micro.wav")
+     soundJ4 = loadSound("assets/soundsR/funky.wav")
+     soundK4 = loadSound("assets/soundsR/gratte_cuillere.wav")
+     soundL4 = loadSound("assets/soundsR/harmonique.wav")
+     soundM4 = loadSound("assets/soundsR/jimi.wav")
+     soundN4 = loadSound("assets/soundsR/j.bonamassa_lick.wav")
+     soundO4 = loadSound("assets/soundsR/jump_wah_wah.wav")
+     soundP4 = loadSound("assets/soundsR/retour_lick.wav")
+     soundQ4 = loadSound("assets/soundsR/rebond_basse.wav")
+     soundS4 = loadSound("assets/soundsR/slide_317.wav")
+     soundT4 = loadSound("assets/soundsR/dumiel.wav")
+     soundU4 = loadSound("assets/soundsR/watchtower_lick.wav")
+     soundV4 = loadSound("assets/soundsR/western.wav")
+     soundW4 = loadSound("assets/soundsR/fin.wav")
+     soundX4 = loadSound("assets/soundsR/saute_de_veau.wav")
+     soundY4 = loadSound("assets/soundsR/tap_slide.wav")*/
+
 }
 
 function setup() {
@@ -143,13 +247,13 @@ function setup() {
     soundHFFT.setInput(soundH)
 
     //for color palette, helped by a sketch of @GotoLoop, sketch online at https://forum.processing.org/two/discussion/17621/array-of-colors#Item_1
-    palette[0] = color(154, 202, 62)
+    palette[0] = color(154, 202, 42)
     palette[1] = color(151, 71, 140)
     palette[2] = color(212, 42, 41)
-    palette[3] = color(252, 217, 76)
+    palette[3] = color(202, 167, 46)
     palette[4] = color(74, 184, 219)
     palette[5] = color(255, 140, 231)
-    palette[6] = color(30, 25, 106)
+    palette[6] = color(30, 25, 86)
     palette[7] = color(241, 101, 39)
 
     lineColor[0] = color(232, 223, 205, 15)
@@ -272,9 +376,6 @@ function draw() {
 
 
     //then short animations
-    if (soundO.currentTime() < soundO.duration() - 0.1 && soundO.currentTime() > 0) {
-        animO()
-    }
 
     if (soundG.currentTime() < soundG.duration() - 0.1 && soundG.currentTime() > 0) {
         animG()
@@ -288,10 +389,6 @@ function draw() {
         animC()
     } else springs = []
 
-    if (soundF.currentTime() < soundF.duration() - 0.1 && soundF.currentTime() > 0) {
-        animF()
-    }
-
     if (soundH.currentTime() < soundH.duration() - 0.1 && soundH.currentTime() > 0) { //h
         animH()
     }
@@ -300,12 +397,20 @@ function draw() {
         animI()
     }
 
+    if (soundO.currentTime() < soundO.duration() - 0.1 && soundO.currentTime() > 0) {
+        animO()
+    }
+
     if (soundT.currentTime() < soundT.duration() - 0.1 && soundT.currentTime() > 0) {
         animT()
     }
 
     if (soundK.currentTime() < soundK.duration() - 0.1 && soundK.currentTime() > 0) {
         animK()
+    }
+
+    if (soundF.currentTime() < soundF.duration() - 0.1 && soundF.currentTime() > 0) {
+        animF()
     }
 
     if (soundJ.currentTime() < soundJ.duration() - 0.1 && soundJ.currentTime() > 0) {
@@ -371,7 +476,7 @@ function keyPressed() {
         }
     }
 
-        //backing tracks animations
+    //backing tracks animations
     if (keyIsDown(65) == true) {
         for (let i = 0; i < 4; i++) {
             colorsCircles[i] = random(palette)
@@ -405,6 +510,12 @@ function keyPressed() {
         }
     }
 
+    if (keyIsDown(70) == true) {
+        for (let i = 0; i < 30; i++) { //30 valeur arbitraire, mais sur mon écran 17", j'ai 13 cercles...prudence est mère de sureté !
+            Ycircle[i] = random(-75, 75)
+        }
+    }
+
     if (keyIsDown(82) == true) {
         for (let i = 0; i < 25; i++) {
             redR[i] = random(80)
@@ -421,8 +532,8 @@ function keyPressed() {
             soundA.stop()
         }
     }
-    
-        if (keyIsDown(90) == true) {
+
+    if (keyIsDown(90) == true) {
         if ((soundA.isPlaying() == true) || (soundE.isPlaying() == true) || (soundR.isPlaying() == true)) {
             //console.log("backingtrack")
             soundA.stop()
@@ -454,7 +565,14 @@ function keyPressed() {
 
     if (keyIsDown(74) == true) {
         couleurJ = random(palette)
-        directionJ = random(TWO_PI) //toujours perturbé par les autres random, pourquoi ?
+        directionJ = random(TWO_PI)
+        newOriginX = random((width / 2) - 50, (width / 2) + 50)
+        newOriginY = random((height / 2) + 50, (height / 2) - 50)
+
+        for (let i = 0; i < 15; i++) {
+            xtargetJ[i] = random(100, 500)
+            ytargetJ[i] = random(-100, 100)
+        }
     }
 
     if (keyIsDown(75) == true) {
@@ -517,6 +635,7 @@ function windowResized() {
 
 
 function animA() {
+    // multiples couches de cerlces qui pivotent dans un sens aléatoire en fonction du volume d'une plage de fréquence
     push()
 
     soundAFFT.analyze()
@@ -626,6 +745,7 @@ function animC() {
 }
 
 function animD() {
+    //spirograph, try to keep the key down and drop it sometimes
     push()
     t = map(soundD.currentTime(), 0, soundD.duration(), 0, 20)
     angleL += speedL * t
@@ -645,6 +765,7 @@ function animD() {
 
 //inspirée d'un sketch Pde tiré du bouquin "DEsign Generatif" de H. Bohnacker, B. Grob, J. Laub, et C. Lazzeroni publié par Pyramid
 function animE() {
+    //polygone au nombre de faces changeant selon l'amplitude du son
     push()
     var levelE = amplitudeE.getLevel()
     // console.log(levelE)
@@ -653,19 +774,15 @@ function animE() {
     let vertices = map(levelE, 0, 0.19, 2, 60)
     let nbcircles = 80 // map (soundE.currentTime(),0,soundE.duration(),0,200)
     let angle = TWO_PI / vertices
-
-
     noFill()
     strokeWeight(1)
-    stroke(156, 120, 10, 255)
-
 
     for (let j = 0; j < nbcircles; j++) {
         let radius
         if (j > 40) radius = j / 35
         else radius = j / 40
 
-        stroke(156, 120, 10, nbcircles)
+        stroke(74, 184, 219, nbcircles)
         beginShape()
         for (let i = 0; i < vertices; i++) {
             let x = (cos(angle * i) * ((height / 2) - 100)) / radius
@@ -678,12 +795,12 @@ function animE() {
 }
 
 function animF() {
-    //pulupulu un escargot qui enappelle un autre
-    var levelF = amplitudeF.getLevel()
+    //pulupulu un escargot qui en appelle un autre
+    let levelF = amplitudeF.getLevel()
     transparence = 10
-    var radius = map(levelF, 0, 0.1, 20, 150) //pour changer le radius des points
-    var point = 12
-    var currentPoint = map(soundF.currentTime(), 0, soundF.duration(), 0, point + 1)
+    let radius = map(levelF, 0, 0.1, 20, 150) //pour changer le radius des points
+    let point = 12
+    let currentPoint = map(soundF.currentTime(), 0, soundF.duration(), 0, point + 1)
 
     push()
     noFill()
@@ -692,14 +809,16 @@ function animF() {
     translate(0, height / 2)
     for (let i = 1; i < currentPoint + 1; i++) {
 
-        ellipse(i * width / 14, 0, radius, radius)
-        ellipse(i * width / 14, 0, radius + 15, radius + 15)
-        ellipse(i * width / 14, 0, radius + 30, radius + 30)
+        ellipse((i * width / 14), Ycircle[i], radius, radius)
+        ellipse((i * width / 14), Ycircle[i], radius + 15, radius + 15)
+        ellipse((i * width / 14), Ycircle[i], radius + 30, radius + 30)
+
     }
     pop()
 }
 
 function animG() {
+    //droite verticale  qui slide vers la droite 
     push()
     var levelG = map(amplitudeG.getLevel(), 0, 0.08772784950665151, 0, 100)
     let posX = map(soundG.currentTime(), 0, soundG.duration(), 0, width)
@@ -710,6 +829,7 @@ function animG() {
 }
 
 function animH() {
+    //croisement de multiples barres avec différents angles bougeant un peu à la manière d'un noise, mais selon le volume d'une plage de fréquences
     push()
     noFill()
     strokeWeight(5)
@@ -729,6 +849,7 @@ function animH() {
 }
 
 function animI() { //i
+    //matéralisation de l'amplitude entre deux droites verticales
     let levelI = amplitudeI.getLevel()
     // console.log(levelI)
     var length = map(levelI, 0, 0.042, 0, width / 10)
@@ -748,26 +869,20 @@ function animI() { //i
 }
 
 function animJ() { //j
-
     //jet de cocobilles
     let t = map(soundJ.currentTime(), 0, soundJ.duration() * 0.60, 0, 1)
     t = constrain(t, 0, 1)
-
-    let xtarget = []
-    let ytarget = []
 
     push()
     noStroke()
     fill(couleurJ)
     //placer le point d'origine dans un cercle de 50px autour du centre de l'écran
-    translate(random((width / 2) - 50, (width / 2) + 50), random((height / 2) + 50, (height / 2) - 50))
+    translate(newOriginX, newOriginY)
     //angle de lancé alétoire
     rotate(directionJ)
     for (let i = 0; i < 15; i++) {
-        xtarget = random(100, 500)
-        ytarget = random(-100, 100)
-        let x = lerp(0, xtarget, t)
-        let y = lerp(0, ytarget, t)
+        let x = lerp(0, xtargetJ[i], t)
+        let y = lerp(0, ytargetJ[i], t)
         ellipse(x, y, 20, 20)
     }
     pop()
@@ -790,10 +905,11 @@ function animK() {
 
 function animL() { //l
     let transp = map(soundL.currentTime(), 0, soundL.duration() - 0.2, 100, 0)
-    background(73, 19, 109, transp)
+    background(73, 19, 119, transp)
 }
 
 function animM() {
+    //interpolation du nombre de face d'un polygone
     push()
     let radius;
     if (width < height) radius = width / 3
@@ -818,7 +934,7 @@ function animM() {
 }
 
 function animN() {
-
+    //à partir du papillon de T.Fay, un peu lourde, ralentit le Patitap...
     push()
     translate(width / 2, height / 2)
     for (let i = 0; i <= 6000; i++) {
@@ -839,22 +955,26 @@ function animN() {
 }
 
 function animO() {
-    //circle morph
+    //circles morphing depending on amp of the sound ; w/ effect of dephasing between x and y axes
     push()
-    fill(220, 0, 30)
-    noStroke()
-    //   strokeWeight(2)
+    noFill()
+    strokeWeight(1.5)
     var levelO = amplitudeO.getLevel()
-    amppY += 0.05
+    amppY += 0.05 // pour déphaser les axes x et y des cercles
     amppX += 0.03
     let radiusX = map(levelO, 0, 0.1, 30, 350) * cos(amppX)
     let radiusY = map(levelO, 0, 0.1, 30, 350) * cos(amppY)
 
-    ellipse(width / 2, height / 2, radiusX, radiusY)
+    for (let i = 0; i < 40; i++) {
+        var c = color(i * 4, 9, 154)
+        stroke(c)
+        ellipse((width / 2), (height / 2), radiusX + (i * 15), radiusY + (i * 15))
+    }
     pop()
 }
 
 function animP() {
+    //petites lucioles qui se déplacent de gauche vers la droite
     push()
     let x = map(soundP.currentTime(), 0, soundP.duration(), 0, width)
     noStroke()
@@ -867,9 +987,9 @@ function animP() {
 }
 
 function animQ() {
+    //spring effect ; try to tap a lot of time on Q key and charge the spring !
     push()
     springQ.push(new Spring(100, width - 200))
-
     springQ[0].update();
     springQ[0].displayQ();
     pop()
@@ -894,6 +1014,7 @@ function animR() {
 
 
 function animS() {
+    // un carré qui se fait la malle en tournicotant
     push()
     soundSFFT.analyze()
     let aigu = soundSFFT.getEnergy("treble")
@@ -917,6 +1038,7 @@ function animS() {
 }
 
 function animT() {
+    //cercle gigoteur
     push()
     let x = width / 2
     let y = height / 2
@@ -928,7 +1050,7 @@ function animT() {
     let levelT = amplitudeT.getLevel()
     // console.log(levelT)
 
-    if (soundT.currentTime() > soundT.duration() / 2.2) {
+    if (soundT.currentTime() > soundT.duration() / 2.2) { //correspond au deuxième temps de la phrase
         size = 116 // console.log(size)
         x = map(aigu, 0, 250, 80, width - 200)
         y = map(levelT, 0, 0.2, 50, height)
@@ -942,6 +1064,7 @@ function animT() {
 
 //inspired by a sketch Pde from  "DEsign Generatif" (p.357), written by H. Bohnacker, B. Grob, J. Laub, et C. Lazzeroni, published by Pyramid
 function animU() { //u
+    //Lissajous curve
     push()
     translate(width / 2, height / 2)
     let nombrePoints = 1500
@@ -965,12 +1088,12 @@ function animU() { //u
 }
 
 function animV() {
-    //circle morph
+    //circle morph qui arrivent sur le dancefloor
     push()
     fill(couleurV)
     noStroke()
     var levelV = amplitudeV.getLevel()
-    amppY += 0.05
+    amppY += 0.05 // même effet de déphasage que animO
     amppX += 0.03
     let radiusY = 120
     let radiusX = 120
@@ -979,7 +1102,7 @@ function animV() {
     let posYhaut = map(soundV.currentTime(), 0, soundV.duration() * 0.08, 0, height / 2)
     let diminue = 1
 
-    if (soundV.currentTime() > soundV.duration() * 0.08) {
+    if (soundV.currentTime() > soundV.duration() * 0.08) { // fixer la position des cercles au centre
         diminue = map(soundV.currentTime(), soundV.duration() * 0.08, soundV.duration(), 1, 10)
         posY = height / 2
         posYhaut = height / 2
@@ -994,6 +1117,7 @@ function animV() {
 }
 
 function animW() {
+    //la chute molle 
     var distX = 6 * width / 8
     var distY = 6 * height / 7
     let progress = map(soundW.currentTime(), 0, soundW.duration() - 1.5, 0, 1)
@@ -1012,6 +1136,7 @@ function animW() {
 
 
 function animX() {
+    //most satisphying circle morph, top views on YT !
     sizeX += 0.05
     sizeY += 0.07
 
@@ -1027,6 +1152,7 @@ function animX() {
 }
 
 function animY() {
+    //la glissade infernale vers le centre du Patatap
     push()
     t = map(soundY.currentTime(), 0, 3.05, 4 * TWO_PI, 0)
 
@@ -1036,11 +1162,13 @@ function animY() {
     let x = (width / 2) + (cosval * radiusY)
     let y = (height / 2) + (sinval * radiusY)
     let taille = 15
+    //anim en deux temps : la glissade dans un premier temps (else), agrandissement ensuite lorsque le point atteint le centre de l'écran
     if (soundY.currentTime() > 3.1) {
         taille = map(soundY.currentTime(), 3.05, soundY.duration(), 15, 200)
         //h += 0.001 noise foireux à corriger
         x = (width / 2)
         y = (height / 2)
+        //changement entre une forme pleine et un contour smooth
         stroke(couleurY)
         strokeWeight(map(soundY.currentTime(), 3.05, soundY.duration(), 2, 5))
         noFill()
@@ -1054,6 +1182,7 @@ function animY() {
 
 
 function animZ() {
+    //LES BISCOOOOTEEES !!!!
     pg.clear()
     if (frameCount % 24 == 0) { //almost the perfect tempo corresponding to the real tempo of the song 
         biscottes.push(new biscotte())

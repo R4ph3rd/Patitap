@@ -58,7 +58,7 @@ function Spring(_x, middle, middleSpring) {
 
 
     this.display = function () {
-        stroke(232, 199, 97);
+        stroke(212, 189, 67);
         strokeWeight(1)
         noFill()
         ellipse(_x, this.y_pos, 15, 15);
