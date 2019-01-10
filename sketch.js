@@ -1,4 +1,5 @@
-var timer
+var timer = 0
+var newtimer = 0
 var currentTimer
 var seed = 1234;
 
@@ -51,14 +52,18 @@ var couleurF, couleurG, couleurH, couleurI, couleurJ, couleurK, couleurM, couleu
 var colorsCircles = []
 var randomColor = []
 var orientationA = []
+
+//directions
 var directionA = []
+var directionG
+var directionJ
 
 //randoms for H, R & J
 var x1H = []
 var x2H = []
 var xR = []
 var yR = []
-var directionJ
+
 
 //c & q
 var springs = []
@@ -300,8 +305,8 @@ function draw() {
     musicPlay(soundW, 87) //w 
     musicPlay(soundX, 88) //x
     musicPlay(soundY, 89) //y
-    
-    
+
+
     //to display instructions if no sounds have been played since 3sec
     //placé après musicPlay() qui reboote le timer, sans quoi la condition serait toujours valide car inchangée 
     currentTimer = millis()
@@ -476,13 +481,6 @@ function keyPressed() {
     if (keyIsDown(65) == true) {
         for (let i = 0; i < 4; i++) {
             colorsCircles[i] = random(palette)
-            //only one backing track at the same time is available, because others sounds change depeding on it 
-            if ((soundZ.isPlaying() == true) || (soundE.isPlaying() == true) || (soundR.isPlaying() == true)) {
-                //console.log("backingtrack")
-                soundZ.stop()
-                soundE.stop()
-                soundR.stop()
-            }
         }
 
         //setup of the colors and rotations of forms
@@ -492,12 +490,21 @@ function keyPressed() {
         for (let j = 0; j < height / 2; j = j + 35) {
             randomColor[j] = random(colorsCircles)
             orientationA[j] = random(j)
-            directionA[j] = direction = int(random(0, 2) < 1) ? 1 : -1
+            directionA[j] = int(random(0, 2) < 1) ? 1 : -1
         }
 
+        //only one backing track at the same time is available, because others sounds change depeding on it 
+        //ok there is a trick : if you press two of them or more at the same time, it slip throught this rule
+        if ((soundZ.isPlaying() == true) || (soundE.isPlaying() == true) || (soundR.isPlaying() == true)) {
+            //console.log("backingtrack")
+            soundZ.stop()
+            soundE.stop()
+            soundR.stop()
+        }
     }
 
-    if (keyIsDown(69) == true) {
+    if (keyIsDown(69) == true) { //e
+        //only one backing track at the same time is available, because others sounds change depeding on it 
         if ((soundA.isPlaying() == true) || (soundZ.isPlaying() == true) || (soundR.isPlaying() == true)) {
             //console.log("backingtrack")
             soundA.stop()
@@ -506,13 +513,7 @@ function keyPressed() {
         }
     }
 
-    if (keyIsDown(70) == true) {
-        for (let i = 0; i < 30; i++) { //30 valeur arbitraire, mais sur mon écran 17", j'ai 13 cercles...prudence est mère de sureté !
-            Ycircle[i] = random(-75, 75)
-        }
-    }
-
-    if (keyIsDown(82) == true) {
+    if (keyIsDown(82) == true) { //r
         for (let i = 0; i < 25; i++) {
             redR[i] = random(80)
             greenR[i] = random(250)
@@ -540,11 +541,18 @@ function keyPressed() {
 
     //others animations
     if (keyIsDown(70) == true) {
+        for (let i = 0; i < 30; i++) { //30 valeur arbitraire, mais sur mon écran 17", j'ai 13 cercles...prudence est mère de sureté !
+            Ycircle[i] = random(-75, 75)
+        }
+    }
+
+    if (keyIsDown(70) == true) {
         couleurF = random(palette)
     }
 
     if (keyIsDown(71) == true) {
         couleurG = random(palette)
+        directionG = int(random(0, 2) < 1) ? 1 : -1
     }
 
     if (keyIsDown(72) == true) {
@@ -607,24 +615,25 @@ function keyPressed() {
     if (keyIsDown(66) == true) b = 1
 }
 
+
 function musicPlay(sound, keyID) {
 
     if (keyIsDown(keyID) == true) {
         seed = random(9999)
 
         //to display instructions if no key is pressed for 5sec since the end of the last sound
-        timer = millis() + 5000 + (sound.duration() * 1000) // temps actuel + 5 sec + durée du son
-        // console.log("timer = " + timer)
+        newtimer = millis() + 5000 + (sound.duration() * 1000) // temps actuel + 5 sec + durée du son
+        if (newtimer > timer) { //pour s'assurer qu'une animation courte déclenchée après une longue ne vienne pas reset le timer 
+            timer = newtimer
+        }
 
         if (sound.isPlaying() == true) {
             sound.stop()
             sound.play()
-
-        } else {
-            sound.play()
-        }
+        } else sound.play()
     } //ifkeydown
 }
+
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight)
@@ -677,7 +686,7 @@ function animB() {
     push()
     rectMode(CENTER)
     let levelB = amplitudeB.getLevel()
-    console.log(levelB)
+    //console.log(levelB)
     let seuil = map(levelB, 0, 0.08187300869102197, 0, 100)
     //retrecissement du rect interne par rapport à l'amp
     let miniX = map(levelB, 0, 0.08187300869102197, 50, 5)
@@ -765,7 +774,7 @@ function animE() {
     //polygone au nombre de faces changeant selon l'amplitude du son
     push()
     var levelE = amplitudeE.getLevel()
-    console.log(levelE)
+    //console.log(levelE)
     translate(width / 2, height / 2)
     let vertices = map(levelE, 0, 0.19, 2, 50)
     let nbcircles = 80 // map (soundE.currentTime(),0,soundE.duration(),0,200)
@@ -819,9 +828,18 @@ function animG() {
     push()
     var levelG = map(amplitudeG.getLevel(), 0, 0.08772784950665151, 0, 100)
     let posX = map(soundG.currentTime(), 0, soundG.duration(), 0, width)
+    let posY = map(soundG.currentTime(), 0, soundG.duration(), 0, height)
     stroke(couleurG)
     strokeWeight(30)
-    if (levelG > 60) line(posX, 0, posX, height)
+    if (levelG > 60) {
+        if (directionG == 1) {
+            line(posX, 0, posX, height)
+            line(posX - (width / 18), 0, posX - (width / 18), height)
+        } else {
+            line(0, posY, width, posY)
+            line(0, posY - (height / 10), width, posY - (height / 10))
+        }
+    }
     pop()
 }
 
