@@ -1,15 +1,12 @@
-//to hide instructions
-document.addEventListener('keypress', (event) => {
-    document.getElementById('instructions').style.display = "none";
-})
-
-var amplitudeMaster
-var levelMaster
+var timer
+var currentTimer
 var seed = 1234;
+
+//backing tracks loops
 var loop
 
 var amplitudeA, amplitudeB, amplitudeD, amplitudeK, amplitudeF, amplitudeE, amplitudeG, amplitudeT, amplitudeV
-var soundAFFT, soundSFFT, soundCFFT, soundTFFT, soundQFFT, soundHFFT
+var soundAFFT, soundCFFT, soundTFFT, soundQFFT, soundHFFT
 
 var biscottes = []
 var cordes = []
@@ -21,17 +18,8 @@ var pg, pgE, pgC
 var amppX = 50
 var amppY = 100
 
-//l
-var angleL = 20
-var speedL = 0.25
-var radiusL = 90
-var sx = 30
-var sy = 30
-
-//q
-var angleQ = 20
-var speedQ = 0.25
-var radiusQ = 50
+//d
+var angleD = 20
 
 //x
 var sizeX = 0
@@ -49,6 +37,7 @@ var palette = []
 var randomColor
 var lineColor = []
 
+//random color values
 var redR = []
 var greenR = []
 var blueR = []
@@ -60,6 +49,7 @@ var randomColor = []
 var orientationA = []
 var directionA = []
 
+//randoms for H, R & J
 var x1H = []
 var x2H = []
 var xR = []
@@ -81,14 +71,14 @@ function preload() {
     soundR = loadSound("assets/rythm_wahwah1.wav")
 
     //sounds without backing tracks
-    soundB = loadSound("assets/blueslick1.wav")
+    soundB = loadSound("assets/turnaround1.wav")
     soundC = loadSound("assets/merlin.wav")
     soundD = loadSound("assets/blues_lick_3.wav")
     soundF = loadSound("assets/feutre.wav")
     soundG = loadSound("assets/blues_double.wav")
     soundH = loadSound("assets/disco.wav")
     soundI = loadSound("assets/echo_micro.wav")
-    soundJ = loadSound("assets/funky.wav")
+    soundJ = loadSound("assets/blueslick1.wav")
     soundK = loadSound("assets/gratte_cuillere.wav")
     soundL = loadSound("assets/harmonique.wav")
     soundM = loadSound("assets/jimi.wav")
@@ -209,13 +199,13 @@ function setup() {
     //no loop of backing tracks
     loop = 0
 
-    //tous les analysers de son
-    amplitudeMaster = new p5.Amplitude()
+  
 
+    //tous les analysers de son
     amplitudeA = new p5.Amplitude()
     amplitudeA.setInput(soundA)
     amplitudeB = new p5.Amplitude()
-    amplitudeB.setInput()
+    amplitudeB.setInput(soundB)
     amplitudeD = new p5.Amplitude()
     amplitudeD.setInput(soundD)
     amplitudeF = new p5.Amplitude()
@@ -283,7 +273,11 @@ function draw() {
     background(0, 40)
 
     //to display instructions if no sounds have been played since 3sec
-    levelMaster = amplitudeMaster.getLevel()
+    currentTimer = millis()
+    //console.log("current = " + currentTimer + "            timer = " + timer)
+
+    if ((currentTimer > timer)) document.getElementById('instructions').style.display = "initial";
+
 
     //backing tracks
     musicPlay(soundA, 65) //a
@@ -465,6 +459,9 @@ function draw() {
 
 //to avoid changes during the play of the sound due to use of random() method
 function keyPressed() {
+    //hide instruction if a key is Pressed
+    document.getElementById('instructions').style.display = "none";
+    
     // activate / desactivate loop condition for 4 backings tracks
     if (keyCode === ENTER) {
         if (loop) {
@@ -613,6 +610,10 @@ function musicPlay(sound, keyID) {
     if (keyIsDown(keyID) == true) {
         seed = random(9999)
 
+        //to display instructions if no key is pressed for 5sec since the end of the last sound
+        timer = millis() + 5000 + (sound.duration() * 1000) // temps actuel + 5 sec + durée du son
+       // console.log("timer = " + timer)
+
         if (sound.isPlaying() == true) {
             sound.stop()
             sound.play()
@@ -620,12 +621,7 @@ function musicPlay(sound, keyID) {
         } else {
             sound.play()
         }
-
-
-
     } //ifkeydown
-
-
 }
 
 function windowResized() {
@@ -637,7 +633,6 @@ function windowResized() {
 function animA() {
     // multiples couches de cerlces qui pivotent dans un sens aléatoire en fonction du volume d'une plage de fréquence
     push()
-
     soundAFFT.analyze()
     let basses = soundAFFT.getEnergy("bass")
     // console.log(basses)
@@ -680,15 +675,15 @@ function animB() {
     push()
     rectMode(CENTER)
     let levelB = amplitudeB.getLevel()
-    // console.log(levelB)
-    let seuil = map(levelB, 0, 0.04188412655659618, 0, 100)
+    console.log(levelB)
+    let seuil = map(levelB, 0,0.08187300869102197, 0, 100)
     //retrecissement du rect interne par rapport à l'amp
-    let miniX = map(levelB, 0, 0.04188412655659618, 50, 5)
-    let miniY = map(levelB, 0, 0.04188412655659618, 180, 18)
+    let miniX = map(levelB, 0, 0.08187300869102197, 50, 5)
+    let miniY = map(levelB, 0, 0.08187300869102197, 180, 18)
     //grossissement du rect exterieur par rapport à l'amplitude
-    let maxX = map(levelB, 0, 0.04188412655659618, 0, 50)
-    let maxY = map(levelB, 0, 0.04188412655659618, 0, 180)
-    let minicoin = map(levelB, 0, 0.04188412655659618, 0, 10)
+    let maxX = map(levelB, 0,0.08187300869102197, 0, 50)
+    let maxY = map(levelB, 0,0.08187300869102197, 0, 180)
+    let minicoin = map(levelB, 0, 0.08187300869102197, 0, 10)
 
 
     let totems = 6
@@ -748,17 +743,17 @@ function animD() {
     //spirograph, try to keep the key down and drop it sometimes
     push()
     t = map(soundD.currentTime(), 0, soundD.duration(), 0, 20)
-    angleL += speedL * t
-    let sinval = sin(angleL)
-    let cosval = cos(angleL)
-    let x = (width / 2) + (cosval * radiusL)
-    let y = (height / 2) + (sinval * radiusL)
-    let x2 = x + cos(angleL * sx) * radiusL / 2
-    let y2 = y + sin(angleL * sy) * radiusL / 2
-    fill(235,223,89)
+    angleD += 0.25 * t
+    let sinval = sin(angleD)
+    let cosval = cos(angleD)
+    let x = (width / 2) + (cosval * 90)
+    let y = (height / 2) + (sinval * 90)
+    let x2 = x + cos(angleD * 30) * 90 / 2
+    let y2 = y + sin(angleD * 30) * 90 / 2
+    fill(235, 223, 89)
     noStroke()
     rect(x, y, 25, 25, 2)
-    fill(94,211,83)
+    fill(94, 211, 83)
     rect(x2, y2, 25, 25, 2)
     pop()
 }
@@ -768,8 +763,7 @@ function animE() {
     //polygone au nombre de faces changeant selon l'amplitude du son
     push()
     var levelE = amplitudeE.getLevel()
-    // console.log(levelE)
-
+     console.log(levelE)
     translate(width / 2, height / 2)
     let vertices = map(levelE, 0, 0.19, 2, 50)
     let nbcircles = 80 // map (soundE.currentTime(),0,soundE.duration(),0,200)
@@ -779,8 +773,9 @@ function animE() {
 
     for (let j = 0; j < nbcircles; j++) {
         let radius
+        //créer une différence dans les shapes selon leur taille
         if (j > 40) radius = j / 35
-        else radius = j / 40
+        else radius = j / 10
 
         stroke(74, 184, 219, nbcircles)
         beginShape()
@@ -797,7 +792,7 @@ function animE() {
 function animF() {
     //pulupulu un escargot qui en appelle un autre
     let levelF = amplitudeF.getLevel()
-    transparence = 10
+
     let radius = map(levelF, 0, 0.1, 20, 150) //pour changer le radius des points
     let point = 12
     let currentPoint = map(soundF.currentTime(), 0, soundF.duration(), 0, point + 1)
@@ -851,7 +846,6 @@ function animH() {
 function animI() { //i
     //matéralisation de l'amplitude entre deux droites verticales
     let levelI = amplitudeI.getLevel()
-    // console.log(levelI)
     var length = map(levelI, 0, 0.042, 0, width / 10)
     push()
     noStroke()
@@ -865,7 +859,6 @@ function animI() { //i
         }
         pop()
     }
-
 }
 
 function animJ() { //j
@@ -898,14 +891,13 @@ function animK() {
     stroke(couleurK)
     strokeWeight(height / 8)
     strokeCap(SQUARE)
-    noFill()
     line(before, height / 2, after, height / 2)
     pop()
 }
 
 function animL() { //l
     let transp = map(soundL.currentTime(), 0, soundL.duration() - 0.2, 100, 0)
-    background(59,66,86, transp)
+    background(59, 66, 86, transp)
 }
 
 function animM() {
@@ -930,7 +922,6 @@ function animM() {
     }
     endShape(CLOSE);
     pop()
-
 }
 
 function animN() {
@@ -951,7 +942,6 @@ function animN() {
         pop()
     }
     pop()
-
 }
 
 function animO() {
@@ -965,7 +955,7 @@ function animO() {
     let radiusX = map(levelO, 0, 0.1, 30, 350) * cos(amppX)
     let radiusY = map(levelO, 0, 0.1, 30, 350) * cos(amppY)
 
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 25; i++) {
         let c = color(i * 4, 9, 154)
         stroke(c)
         ellipse((width / 2), (height / 2), radiusX + (i * 15), radiusY + (i * 15))
@@ -1016,9 +1006,6 @@ function animR() {
 function animS() {
     // un carré qui se fait la malle en tournicotant
     push()
-    soundSFFT.analyze()
-    let aigu = soundSFFT.getEnergy("treble")
-    // console.log(aigu)
     let g = map(soundS.currentTime(), 0, soundS.duration(), 0, 1)
     let x = lerp(0, width, g)
     //pour conserver plus ou moins la même vitesse de déplacement selon la taille de la fenetre
@@ -1051,7 +1038,7 @@ function animT() {
     // console.log(levelT)
 
     if (soundT.currentTime() > soundT.duration() / 2.2) { //correspond au deuxième temps de la phrase
-        size = 116 // console.log(size)
+        size = 116 // fixer la taille atteinte à ce moment de l'anim
         x = map(aigu, 0, 250, 80, width - 200)
         y = map(levelT, 0, 0.2, 50, height)
     }
