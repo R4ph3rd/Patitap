@@ -1,3 +1,5 @@
+var canvas
+
 var timer = 0
 var newtimer = 0
 var currentTimer
@@ -203,6 +205,7 @@ function preload() {
 
 function setup() {
     canvas = createCanvas(windowWidth, windowHeight);
+    //Capturer.start()
     background(0, 40);
     pixelDensity(1)
     //no loop of backing tracks
@@ -476,6 +479,18 @@ function keyPressed() {
             loop = 1
         }
     }
+
+    //saveframe to make the gif
+   /* if (keyCode == 20) { // VER.MAJ
+
+        Capturer.capture(canvas)
+        console.log("screen capture start")
+    }
+    if (keyCode == 16) { // VER.MAJ
+        Capturer.stop()
+        Capturer.save()
+        console.log("fin screen capture")
+    }*/
 
     //backing tracks animations
     if (keyIsDown(65) == true) {
@@ -1153,7 +1168,7 @@ function animX() {
     else taillemax = 250
 
     noFill()
-    stroke(220, 0, 30)
+    stroke(212, 42, 41)
     strokeWeight(2)
     ellipse(width / 2, height / 2, cos(sizeX) * taillemax, cos(sizeY) * taillemax)
 }
