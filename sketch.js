@@ -79,7 +79,7 @@ function preload() {
     soundA = loadSound("assets/mannishboycorrect.wav")
     soundZ = loadSound("assets/stevieRAY.wav")
     soundE = loadSound("assets/bbking_loop_jazzy.wav")
-    soundR = loadSound("assets/rythm_wahwahcorrect.wav")
+    soundR = loadSound("assets/rythm_wahwahcorrect1.wav")
 
     //sounds without backing tracks
     soundB = loadSound("assets/turnaround1.wav")
